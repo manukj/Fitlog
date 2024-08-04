@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gainz/resource/theme/theme.dart';
 import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -22,10 +23,10 @@ class PrimaryButton extends StatelessWidget {
       child: NeoPopTiltedButton(
         isFloating: true,
         onTapUp: onPressed,
-        decoration: const NeoPopTiltedButtonDecoration(
-          color: Color(0xFF1E2C44),
-          plunkColor: Color.fromARGB(255, 37, 52, 79),
-          shadowColor: Color.fromRGBO(36, 36, 36, 1),
+        decoration: NeoPopTiltedButtonDecoration(
+          color: AppThemedata.primary,
+          plunkColor: AppThemedata.primary.withOpacity(0.5),
+          shadowColor: AppThemedata.shadowColor,
           showShimmer: true,
           // shimmerColor: Color(0xFF204E41),
         ),
@@ -34,7 +35,7 @@ class PrimaryButton extends StatelessWidget {
               child: Text(
                 text ?? '',
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: Color(0xFF0A0A12),
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
