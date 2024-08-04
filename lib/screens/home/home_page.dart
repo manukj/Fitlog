@@ -1,30 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:gainz/common_widget/primary_button.dart';
+import 'package:gainz/common_widget/common_error_view.dart';
+import 'package:gainz/common_widget/common_loader.dart';
+import 'package:gainz/resource/toast/toast_manager.dart';
+import 'package:gainz/screens/home/view_model/camera_view_model.dart';
 import 'package:gainz/screens/home/widget/camera_widget.dart';
+import 'package:get/get_state_manager/src/simple/get_view.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends GetView<CameraViewModel> {
   const HomePage({super.key});
+
+  Future<void> _initializeCamera() async {
+    await controller.init();
+    return controller.initializeControllerFuture;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          const SizedBox(
-            width: double.infinity,
-            height: double.infinity,
-            child: CameraWidget(),
-          ),
-          Positioned(
-            bottom: 20,
-            left: 20,
-            child: PrimaryButton(
-              onPressed: () {},
-              text: 'Start Workout',
-            ),
-          ),
-        ],
+      body: FutureBuilder(
+        future: _initializeCamera(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CommonLoader();
+          } else {
+            if (snapshot.hasError) {
+              _showErrorToast(snapshot.error.toString());
+              return const CommonErrorView(
+                  title: "Camera Initialization Failed");
+            } else {
+              if (controller.controller != null) {
+                return const CameraWidget();
+              } else {
+                return const CommonLoader();
+              }
+            }
+          }
+        },
       ),
     );
+  }
+
+  void _showErrorToast(String string) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ToastManager.showError("Camera Initialization Failed $string");
+    });
   }
 }

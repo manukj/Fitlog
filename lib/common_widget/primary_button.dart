@@ -7,11 +7,13 @@ class PrimaryButton extends StatelessWidget {
   final Widget? child;
   final String? text;
   final VoidCallback onPressed;
+  final double? width;
 
   const PrimaryButton({
     super.key,
     this.child,
     this.text,
+    this.width,
     required this.onPressed,
   }) : assert(child != null || text != null,
             'You must provide either a child or a text');
@@ -19,7 +21,7 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: Get.width - 40,
+      width: width ?? Get.width - 40,
       height: 60,
       child: NeoPopTiltedButton(
         isFloating: true,
