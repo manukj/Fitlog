@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gainz/resource/theme/theme.dart';
+import 'package:get/get.dart';
 import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -18,7 +19,7 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
+      width: Get.width - 40,
       height: 60,
       child: NeoPopTiltedButton(
         isFloating: true,
@@ -28,7 +29,6 @@ class PrimaryButton extends StatelessWidget {
           plunkColor: AppThemedata.primary.withOpacity(0.5),
           shadowColor: AppThemedata.shadowColor,
           showShimmer: true,
-          // shimmerColor: Color(0xFF204E41),
         ),
         child: child ??
             Center(

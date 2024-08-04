@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gainz/common_widget/primary_button.dart';
+import 'package:gainz/screens/home/widget/camera_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -7,12 +8,20 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          const Text('Hello, World!'),
-          PrimaryButton(
-            onPressed: () {},
-            text: "Click Me",
+          const SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+            child: CameraWidget(),
+          ),
+          Positioned(
+            bottom: 20,
+            left: 20,
+            child: PrimaryButton(
+              onPressed: () {},
+              text: 'Start Workout',
+            ),
           ),
         ],
       ),
