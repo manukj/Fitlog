@@ -11,7 +11,8 @@ import 'package:get/get.dart';
 
 enum WorkoutStatus { init, starting, started, paused, resumed }
 
-class CameraViewModel extends GetxController implements IPoseDetectorService {
+class PoseDetectionViewModel extends GetxController
+    implements IPoseDetectorService {
   late final PoseDetectorService _poseDetectorService;
   late List<CameraDescription> cameras;
   CameraController? controller;
@@ -24,7 +25,7 @@ class CameraViewModel extends GetxController implements IPoseDetectorService {
   int totalPoseCount = 0;
   int totalDetectedPoseCount = 0;
 
-  CameraViewModel() {
+  PoseDetectionViewModel() {
     _poseDetectorService = PoseDetectorService(this);
   }
 
@@ -68,11 +69,11 @@ class CameraViewModel extends GetxController implements IPoseDetectorService {
     // controller!.stopImageStream();
     calculatingTotalRep.value = true;
     workoutStatus.value = WorkoutStatus.init;
-    Get.bottomSheet(
-      const CalculatingWorkoutBottomSheet(),
-      isDismissible: false,
-      enableDrag: false,
-    );
+    // Get.bottomSheet(
+    //   const CalculatingWorkoutBottomSheet(),
+    //   isDismissible: false,
+    //   enableDrag: false,
+    // );
   }
 
   Future<void> restartDetecting() async {

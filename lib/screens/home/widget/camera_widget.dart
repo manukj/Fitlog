@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:gainz/resource/constants/image_path.dart';
 import 'package:gainz/screens/home/view_model/camera_view_model.dart';
 import 'package:gainz/screens/home/widget/button_widget.dart';
+import 'package:gainz/screens/home/widget/stop_wathch.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-class CameraWidget extends GetView<CameraViewModel> {
+class CameraWidget extends GetView<PoseDetectionViewModel> {
   const CameraWidget({super.key});
 
   @override
@@ -14,24 +15,37 @@ class CameraWidget extends GetView<CameraViewModel> {
     return Stack(
       children: [
         Obx(() {
-          return AnimatedContainer(
-            duration: const Duration(
-              milliseconds: 1500,
-            ),
-            height: controller.workoutStatus.value == WorkoutStatus.init
-                ? Get.height
-                : Get.height / 2,
-            width: double.infinity,
-            child: CameraPreview(
-              controller.controller!,
+          var isInitState =
+              controller.workoutStatus.value == WorkoutStatus.init;
+          return Align(
+            alignment: Alignment.center,
+            child: AnimatedContainer(
+              duration: const Duration(
+                milliseconds: 1500,
+              ),
+              height: isInitState ? Get.height : Get.height / 2,
+              width: Get.width,
+              child: CameraPreview(
+                controller.controller!,
+              ),
             ),
           );
         }),
-        const Align(
+        Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: EdgeInsets.all(10.0),
-            child: WorkoutStatusButton(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Obx(() {
+                  return StopwatchWidget(
+                    start: controller.workoutStatus.value != WorkoutStatus.init,
+                  );
+                }),
+                const WorkoutStatusButton(),
+              ],
+            ),
           ),
         ),
         _buildCountDownAnimation(),

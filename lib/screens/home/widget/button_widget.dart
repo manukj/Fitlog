@@ -3,7 +3,7 @@ import 'package:gainz/common_widget/primary_button.dart';
 import 'package:gainz/screens/home/view_model/camera_view_model.dart';
 import 'package:get/get.dart';
 
-class WorkoutStatusButton extends GetView<CameraViewModel> {
+class WorkoutStatusButton extends GetView<PoseDetectionViewModel> {
   const WorkoutStatusButton({super.key});
 
   @override

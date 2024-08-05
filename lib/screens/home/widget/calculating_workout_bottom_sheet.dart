@@ -6,7 +6,7 @@ import 'package:gainz/screens/home/view_model/camera_view_model.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-class CalculatingWorkoutBottomSheet extends GetView<CameraViewModel> {
+class CalculatingWorkoutBottomSheet extends GetView<PoseDetectionViewModel> {
   const CalculatingWorkoutBottomSheet({super.key});
 
   @override
