@@ -1,4 +1,11 @@
+import 'dart:isolate';
+import 'dart:typed_data';
+
+import 'package:camera/camera.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gainz/resource/logger/logger.dart';
+import 'package:gainz/resource/painter/pose_painter.dart';
+import 'package:gainz/resource/util/image_util.dart';
 import 'package:gainz/screens/home/service/i_pose_detector_service.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
@@ -6,6 +13,21 @@ enum JumpingJackStatus {
   standing,
   jumpOut, // when legs are spread and hands are above
   jumpIn, // when you bring your legs together and lowering the arm
+}
+
+class DetectPoseParam {
+  final InputImageMetadata metadata;
+  final Uint8List bytes;
+  final SendPort sendPort;
+
+  DetectPoseParam(this.metadata, this.bytes, this.sendPort);
+}
+
+class DetectPoseResult {
+  final CustomPaint customPaint;
+  final List<Pose> poses;
+
+  DetectPoseResult(this.customPaint, this.poses);
 }
 
 class PoseDetectorService {
@@ -19,14 +41,52 @@ class PoseDetectorService {
     options: PoseDetectorOptions(),
   );
 
-  Future<List<Pose>> detectPose(InputImage inputImage) async {
+  void detectPose(CameraImage image, CameraDescription camera,
+      CameraController cameraController) async {
+    final inputImage =
+        ImageUtil.inputImageFromCameraImage(image, camera, cameraController);
+    if (inputImage == null) return;
+    inputImage.metadata;
+    inputImage.bytes;
+
     final poses = await _poseDetector.processImage(inputImage);
-    // checkTheStatusOfPoses(poses);
-    return poses;
+    if (inputImage.metadata?.size != null &&
+        inputImage.metadata?.rotation != null) {
+      final painter = PosePainter(
+        poses,
+        inputImage.metadata!.size,
+        inputImage.metadata!.rotation,
+        CameraLensDirection.back, // might need to change this
+      );
+      // send using thread
+      checkTheStatusOfPoses(poses);
+      _iPoseDetectorService.onPoseDetected(CustomPaint(painter: painter));
+    }
+  }
+
+  // use
+  Future<void> detectPoseInIsolate(DetectPoseParam param) async {
+    final inputImage = InputImage.fromBytes(
+      bytes: param.bytes,
+      metadata: param.metadata,
+    );
+    final poses = await _poseDetector.processImage(inputImage);
+    if (inputImage.metadata?.size != null &&
+        inputImage.metadata?.rotation != null) {
+      final painter = PosePainter(
+        poses,
+        inputImage.metadata!.size,
+        inputImage.metadata!.rotation,
+        CameraLensDirection.back, // might need to change this
+      );
+      // send using thread
+      final result = DetectPoseResult(CustomPaint(painter: painter), poses);
+      param.sendPort.send(result);
+    }
   }
 
   void checkTheStatusOfPoses(List<Pose> poses) async {
-    var currentJumpingJackStatus = JumpingJackStatus.standing;
+    JumpingJackStatus? currentJumpingJackStatus;
     if (poses.isEmpty) {
       appLogger.debug('No Person Found');
       return _iPoseDetectorService.noPersonFound();
@@ -63,17 +123,24 @@ class PoseDetectorService {
     } else if (ankleDistance < shoulderDistance * 1.2 && !handsAboveShoulders) {
       appLogger.debug('Jumping Jacks: Jump In');
       currentJumpingJackStatus = JumpingJackStatus.jumpIn;
-    } else {
-      appLogger.debug('Jumping Jacks: Standing');
-      currentJumpingJackStatus = JumpingJackStatus.standing;
     }
 
-    if (currentJumpingJackStatus == JumpingJackStatus.jumpOut &&
-        previousJumpingJackStatus == JumpingJackStatus.jumpIn) {
+    appLogger.debug(
+        'Jumping Jacks: previous $previousJumpingJackStatus current $currentJumpingJackStatus ');
+
+    if (previousJumpingJackStatus == JumpingJackStatus.jumpOut &&
+        currentJumpingJackStatus == JumpingJackStatus.jumpIn) {
       totalJumpingJacks++;
       appLogger.debug('Total Jumping Jacks: $totalJumpingJacks');
     }
 
-    previousJumpingJackStatus = currentJumpingJackStatus;
+    if (currentJumpingJackStatus != null) {
+      previousJumpingJackStatus = currentJumpingJackStatus;
+    }
+  }
+
+  void resetCount() {
+    totalJumpingJacks = 0;
+    appLogger.debug('Total Jumping Jacks: reset $totalJumpingJacks');
   }
 }

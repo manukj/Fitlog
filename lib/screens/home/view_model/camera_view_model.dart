@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/widgets.dart';
-import 'package:gainz/resource/painter/pose_painter.dart';
-import 'package:gainz/resource/util/image_util.dart';
 import 'package:gainz/screens/home/service/i_pose_detector_service.dart';
 import 'package:gainz/screens/home/service/post_detector_service.dart';
 import 'package:get/get.dart';
@@ -12,7 +10,6 @@ enum WorkoutStatus { init, starting, started, paused, resumed, finished }
 
 class CameraViewModel extends GetxController implements IPoseDetectorService {
   late final PoseDetectorService _poseDetectorService;
-  final _cameraLensDirection = CameraLensDirection.back;
 
   late List<CameraDescription> cameras;
   CameraController? controller;
@@ -62,9 +59,11 @@ class CameraViewModel extends GetxController implements IPoseDetectorService {
   }
 
   Future<void> finishWorkout() async {
-    workoutStatus.value = WorkoutStatus.finished;
-    customPaint.value = const CustomPaint();
     controller!.stopImageStream();
+    Future.delayed(const Duration(seconds: 3), () {
+      customPaint.value = null;
+      workoutStatus.value = WorkoutStatus.finished;
+    });
   }
 
   Future<void> restartDetecting() async {
@@ -80,22 +79,13 @@ class CameraViewModel extends GetxController implements IPoseDetectorService {
   }
 
   void _detectPoses() {
-    controller!.startImageStream((image) async {
-      final inputImage = ImageUtil.inputImageFromCameraImage(
-          image, cameras.first, controller!);
-      if (inputImage == null) return;
-      final poses = await _poseDetectorService.detectPose(inputImage);
-
-      if (inputImage.metadata?.size != null &&
-          inputImage.metadata?.rotation != null) {
-        final painter = PosePainter(
-          poses,
-          inputImage.metadata!.size,
-          inputImage.metadata!.rotation,
-          _cameraLensDirection,
-        );
-        customPaint.value = CustomPaint(painter: painter);
-      }
+    _poseDetectorService.resetCount();
+    controller!.startImageStream((image) {
+      _poseDetectorService.detectPose(
+        image,
+        controller!.description,
+        controller!,
+      );
     });
   }
 
@@ -106,7 +96,10 @@ class CameraViewModel extends GetxController implements IPoseDetectorService {
   }
 
   @override
-  void noPersonFound() {
-    
+  void noPersonFound() {}
+
+  @override
+  void onPoseDetected(CustomPaint customPaint) {
+    this.customPaint.value = customPaint;
   }
 }
