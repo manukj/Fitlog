@@ -1,8 +1,10 @@
 import 'dart:isolate';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:gainz/resource/logger/logger.dart';
+import 'package:gainz/resource/painter/pose_painter.dart';
 import 'package:gainz/resource/util/image_util.dart';
 import 'package:gainz/screens/home/service/i_pose_detector_service.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
@@ -78,51 +80,22 @@ class PoseDetectorService {
 
   void detectPose(CameraImage image, CameraDescription camera,
       CameraController cameraController) async {
-    var receivePortImage = await ImageUtil.inputImageFromCameraImage(
+    var inputImage = await ImageUtil.inputImageFromCameraImage(
         image, camera, cameraController);
-    receivePortImage.listen((data) async {
-      receivePortImage.close();
-      if (data == null) return;
-      InputImage inputImage = data;
-      if (inputImage.metadata == null && inputImage.bytes == null) return;
-
-      final receivePort = ReceivePort();
-      final param = DetectPoseParam(
-        inputImage.metadata!,
-        inputImage.bytes!,
-        receivePort.sendPort,
-        RootIsolateToken.instance!,
-      );
-      await Isolate.spawn<DetectPoseParam>(_processPose, param);
-      receivePort.listen((result) {
-        receivePort.close();
-        // final painter = PosePainter(
-        //   result.poses,
-        //   inputImage.metadata!.size,
-        //   inputImage.metadata!.rotation,
-        //   CameraLensDirection.back,
-        // );
-        _iPoseDetectorService.onPoseDetected(totalJumpingJacks);
-        checkTheStatusOfPoses(result.poses);
-      });
-    });
-  }
-
-  static Future<void> _processPose(DetectPoseParam param) async {
-    BackgroundIsolateBinaryMessenger.ensureInitialized(param.token);
+    if (inputImage.metadata == null && inputImage.bytes == null) return;
     final poseDetector = PoseDetector(options: PoseDetectorOptions());
-
-    final inputImage = InputImage.fromBytes(
-      bytes: param.bytes,
-      metadata: param.metadata,
-    );
-
     final poses = await poseDetector.processImage(inputImage);
-
-    if (inputImage.metadata?.size != null &&
-        inputImage.metadata?.rotation != null) {
-      param.sendPort.send(DetectPoseResult(poses));
-    }
+    checkTheStatusOfPoses(poses);
+    _iPoseDetectorService.onPoseDetected(totalJumpingJacks);
+    final painter = PosePainter(
+      poses,
+      inputImage.metadata!.size,
+      inputImage.metadata!.rotation,
+      CameraLensDirection.back,
+    );
+    _iPoseDetectorService.onPoseDetectionPain(CustomPaint(
+      painter: painter,
+    ));
   }
 
   void checkTheStatusOfPoses(List<Pose> poses) {

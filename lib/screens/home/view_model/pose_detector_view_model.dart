@@ -106,4 +106,9 @@ class PoseDetectorViewModel extends GetxController
       });
     }
   }
+
+  @override
+  void onPoseDetectionPain(CustomPaint customPaint) {
+    this.customPaint.value = customPaint;
+  }
 }

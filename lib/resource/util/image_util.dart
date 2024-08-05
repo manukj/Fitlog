@@ -13,7 +13,7 @@ class ImageUtil {
     DeviceOrientation.landscapeRight: 270,
   };
 
-  static Future<ReceivePort> inputImageFromCameraImage(CameraImage image,
+  static Future<InputImage> inputImageFromCameraImage(CameraImage image,
       CameraDescription camera, CameraController controller) async {
     final ReceivePort receivePort = ReceivePort();
     await Isolate.spawn(_processImage, {
@@ -23,7 +23,7 @@ class ImageUtil {
       'deviceOrientation': controller.value.deviceOrientation,
     });
 
-    return receivePort;
+    return await receivePort.first as InputImage;
   }
 
   static void _processImage(Map<String, dynamic> params) {
