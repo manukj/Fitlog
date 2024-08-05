@@ -25,3 +25,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    # Add assets from the images directory to the application.
+    - assets/images/
+    - assets/lottiefiles/

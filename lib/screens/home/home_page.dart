@@ -4,10 +4,11 @@ import 'package:gainz/common_widget/common_loader.dart';
 import 'package:gainz/resource/toast/toast_manager.dart';
 import 'package:gainz/screens/home/view_model/camera_view_model.dart';
 import 'package:gainz/screens/home/widget/camera_widget.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:get/get.dart';
 
-class HomePage extends GetView<CameraViewModel> {
-  const HomePage({super.key});
+class HomePage extends StatelessWidget {
+  final CameraViewModel controller = Get.put(CameraViewModel());
+  HomePage({super.key});
 
   Future<void> _initializeCamera() async {
     await controller.init();
@@ -26,7 +27,8 @@ class HomePage extends GetView<CameraViewModel> {
             if (snapshot.hasError) {
               _showErrorToast(snapshot.error.toString());
               return const CommonErrorView(
-                  title: "Camera Initialization Failed");
+                title: "Camera Initialization Failed",
+              );
             } else {
               if (controller.controller != null) {
                 return const CameraWidget();

@@ -22,7 +22,7 @@ class App extends StatelessWidget {
               appLogger.debug('Routing to: ${routing?.current}');
             }
           },
-          home: const HomePage(),
+          home: HomePage(),
         ),
       ),
     );
