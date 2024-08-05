@@ -1,13 +1,13 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:gainz/resource/constants/image_path.dart';
-import 'package:gainz/screens/home/view_model/camera_view_model.dart';
+import 'package:gainz/screens/home/view_model/pose_detector_view_model.dart';
 import 'package:gainz/screens/home/widget/button_widget.dart';
 import 'package:gainz/screens/home/widget/stop_wathch.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-class CameraWidget extends GetView<PoseDetectionViewModel> {
+class CameraWidget extends GetView<PoseDetectorViewModel> {
   const CameraWidget({super.key});
 
   @override

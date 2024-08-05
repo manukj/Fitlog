@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:gainz/common_widget/common_error_view.dart';
 import 'package:gainz/common_widget/common_loader.dart';
 import 'package:gainz/resource/toast/toast_manager.dart';
-import 'package:gainz/screens/home/view_model/camera_view_model.dart';
+import 'package:gainz/screens/home/view_model/pose_detector_view_model.dart';
 import 'package:gainz/screens/home/widget/camera_widget.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
-  final PoseDetectionViewModel controller = Get.put(PoseDetectionViewModel());
+  final PoseDetectorViewModel controller = Get.put(PoseDetectorViewModel());
 
   HomePage({super.key});
 

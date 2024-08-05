@@ -2,7 +2,6 @@ import 'dart:isolate';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gainz/resource/logger/logger.dart';
 import 'package:gainz/resource/util/image_util.dart';
 import 'package:gainz/screens/home/service/i_pose_detector_service.dart';
@@ -85,9 +84,8 @@ class PoseDetectorService {
       receivePortImage.close();
       if (data == null) return;
       InputImage inputImage = data;
-      if (inputImage == null ||
-          inputImage.metadata == null && inputImage.bytes == null) return;
-      // Create a ReceivePort to get the result back from the Isolate
+      if (inputImage.metadata == null && inputImage.bytes == null) return;
+
       final receivePort = ReceivePort();
       final param = DetectPoseParam(
         inputImage.metadata!,
@@ -95,10 +93,8 @@ class PoseDetectorService {
         receivePort.sendPort,
         RootIsolateToken.instance!,
       );
-      // Spawn an isolate to process the image
       await Isolate.spawn<DetectPoseParam>(_processPose, param);
       receivePort.listen((result) {
-        // Close the receive port
         receivePort.close();
         // final painter = PosePainter(
         //   result.poses,
@@ -116,25 +112,15 @@ class PoseDetectorService {
     BackgroundIsolateBinaryMessenger.ensureInitialized(param.token);
     final poseDetector = PoseDetector(options: PoseDetectorOptions());
 
-    // Create InputImage from bytes and metadata
     final inputImage = InputImage.fromBytes(
       bytes: param.bytes,
       metadata: param.metadata,
     );
 
-    // Process the image to detect poses
     final poses = await poseDetector.processImage(inputImage);
 
     if (inputImage.metadata?.size != null &&
         inputImage.metadata?.rotation != null) {
-      // final painter = PosePainter(
-      //   poses,
-      //   inputImage.metadata!.size,
-      //   inputImage.metadata!.rotation,
-      //   CameraLensDirection.back,
-      // );
-
-      // Send the result back to the main isolate
       param.sendPort.send(DetectPoseResult(poses));
     }
   }

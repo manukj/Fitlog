@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 
 enum WorkoutStatus { init, starting, started, paused, resumed }
 
-class PoseDetectionViewModel extends GetxController
+class PoseDetectorViewModel extends GetxController
     implements IPoseDetectorService {
   late final PoseDetectorService _poseDetectorService;
   late List<CameraDescription> cameras;
@@ -24,7 +24,7 @@ class PoseDetectionViewModel extends GetxController
   int totalPoseCount = 0;
   int totalDetectedPoseCount = 0;
 
-  PoseDetectionViewModel() {
+  PoseDetectorViewModel() {
     _poseDetectorService = PoseDetectorService(this);
   }
 

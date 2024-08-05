@@ -4,11 +4,13 @@ import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button
 
 class PrimaryButton extends StatelessWidget {
   final Widget? child;
+  final Widget? prefix;
   final String? text;
   final VoidCallback? onPressed;
   final double? width;
   final Color color;
   final bool showShimmer;
+  final TextStyle? textStyle;
 
   const PrimaryButton({
     super.key,
@@ -18,6 +20,8 @@ class PrimaryButton extends StatelessWidget {
     this.onPressed,
     this.showShimmer = true,
     this.color = AppThemedata.primary,
+    this.prefix,
+    this.textStyle,
   }) : assert(child != null || text != null,
             'You must provide either a child or a text');
 
@@ -37,13 +41,24 @@ class PrimaryButton extends StatelessWidget {
         ),
         child: child ??
             Center(
-              child: Text(
-                text ?? '',
-                style: const TextStyle(
-                  color: Color(0xFF0A0A12),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (prefix != null)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: prefix!,
+                    ),
+                  Text(
+                    text ?? '',
+                    style: textStyle ??
+                        const TextStyle(
+                          color: Color(0xFF0A0A12),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ],
               ),
             ),
       ),
