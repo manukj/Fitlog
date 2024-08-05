@@ -1,7 +1,7 @@
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 class PoseUtil {
-  bool isStartPosition(Pose pose) {
+  static bool isStartPosition(Pose pose) {
     const double feetTogetherThreshold = 0.1;
     const double armsAtSidesThreshold = 0.2;
 
@@ -17,7 +17,7 @@ class PoseUtil {
         (rightWrist.y - rightHip.y).abs() < armsAtSidesThreshold;
   }
 
-  bool isJumpingPosition(Pose pose) {
+  static bool isJumpingPosition(Pose pose) {
     const double feetApartThreshold = 0.5;
     const double armsAboveHeadThreshold = 0.2;
 
@@ -34,7 +34,7 @@ class PoseUtil {
         (rightWrist.y < rightShoulder.y - armsAboveHeadThreshold);
   }
 
-  int countJumpingJacks(List<Pose> poses) {
+  static int countJumpingJacks(List<Pose> poses) {
     bool wasInStartPosition = false;
     int jumpingJackCount = 0;
 

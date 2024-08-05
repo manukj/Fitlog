@@ -47,7 +47,7 @@ class WorkoutStatusButton extends GetView<CameraViewModel> {
         Expanded(
           child: PrimaryButton(
             showShimmer: false,
-            color: Colors.green[300]!,
+            color: Colors.grey[700]!,
             onPressed: () {
               if (status == WorkoutStatus.paused) {
                 controller.resumeWorkout();

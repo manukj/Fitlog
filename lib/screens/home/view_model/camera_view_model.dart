@@ -2,14 +2,16 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/widgets.dart';
+import 'package:gainz/resource/painter/pose_painter.dart';
+import 'package:gainz/resource/util/image_util.dart';
+import 'package:gainz/screens/home/service/i_pose_detector_service.dart';
+import 'package:gainz/screens/home/service/post_detector_service.dart';
 import 'package:get/get.dart';
-import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 enum WorkoutStatus { init, starting, started, paused, resumed, finished }
 
-class CameraViewModel extends GetxController {
-  final PoseDetector _poseDetector =
-      PoseDetector(options: PoseDetectorOptions());
+class CameraViewModel extends GetxController implements IPoseDetectorService {
+  late final PoseDetectorService _poseDetectorService;
   final _cameraLensDirection = CameraLensDirection.back;
 
   late List<CameraDescription> cameras;
@@ -18,6 +20,10 @@ class CameraViewModel extends GetxController {
   Rx<CustomPaint?> customPaint = Rx<CustomPaint?>(null);
   Rx<bool> showCountDown = Rx<bool>(false);
   Rx<WorkoutStatus> workoutStatus = Rx<WorkoutStatus>(WorkoutStatus.init);
+
+  CameraViewModel() {
+    _poseDetectorService = PoseDetectorService(this);
+  }
 
   init() async {
     cameras = await availableCameras();
@@ -40,43 +46,29 @@ class CameraViewModel extends GetxController {
   Future<void> startWorkout() async {
     workoutStatus.value = WorkoutStatus.starting;
     await _startCountDown();
-    // controller!.startImageStream((image) async {
-    //   final inputImage = ImageUtil.inputImageFromCameraImage(
-    //       image, cameras.first, controller!);
-    //   if (inputImage == null) return;
-    //   final poses = await _poseDetector.processImage(inputImage);
-    //   if (inputImage.metadata?.size != null &&
-    //       inputImage.metadata?.rotation != null) {
-    //     final painter = PosePainter(
-    //       poses,
-    //       inputImage.metadata!.size,
-    //       inputImage.metadata!.rotation,
-    //       _cameraLensDirection,
-    //     );
-    //     customPaint.value = CustomPaint(painter: painter);
-    //   }
-    // });
+    _detectPoses();
   }
 
   Future<void> pauseWorkout() async {
+    await controller!.stopImageStream();
+    customPaint.value = const CustomPaint();
     workoutStatus.value = WorkoutStatus.paused;
-    // controller!.stopImageStream();
-    // customPaint.value = null;
-  }
-
-  Future<void> finishWorkout() async {
-    workoutStatus.value = WorkoutStatus.finished;
-    // controller!.stopImageStream();
-    // customPaint.value = null;
-  }
-
-  Future<void> restartDetecting() async {
-    workoutStatus.value = WorkoutStatus.init;
   }
 
   void resumeWorkout() {
     workoutStatus.value = WorkoutStatus.resumed;
     _startCountDown();
+    _detectPoses();
+  }
+
+  Future<void> finishWorkout() async {
+    workoutStatus.value = WorkoutStatus.finished;
+    customPaint.value = const CustomPaint();
+    controller!.stopImageStream();
+  }
+
+  Future<void> restartDetecting() async {
+    workoutStatus.value = WorkoutStatus.init;
   }
 
   Future<void> _startCountDown() async {
@@ -87,9 +79,34 @@ class CameraViewModel extends GetxController {
     });
   }
 
+  void _detectPoses() {
+    controller!.startImageStream((image) async {
+      final inputImage = ImageUtil.inputImageFromCameraImage(
+          image, cameras.first, controller!);
+      if (inputImage == null) return;
+      final poses = await _poseDetectorService.detectPose(inputImage);
+
+      if (inputImage.metadata?.size != null &&
+          inputImage.metadata?.rotation != null) {
+        final painter = PosePainter(
+          poses,
+          inputImage.metadata!.size,
+          inputImage.metadata!.rotation,
+          _cameraLensDirection,
+        );
+        customPaint.value = CustomPaint(painter: painter);
+      }
+    });
+  }
+
   @override
   void onClose() {
     controller?.dispose();
     super.onClose();
+  }
+
+  @override
+  void noPersonFound() {
+    
   }
 }
