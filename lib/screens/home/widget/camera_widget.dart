@@ -32,7 +32,7 @@ class CameraWidget extends GetView<PoseDetectionViewModel> {
           );
         }),
         Align(
-          alignment: Alignment.bottomCenter,
+          alignment: Alignment.topCenter,
           child: Padding(
             padding: EdgeInsets.all(10.0),
             child: Column(

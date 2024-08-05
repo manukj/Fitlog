@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:gainz/resource/logger/logger.dart';
 import 'package:gainz/screens/home/service/i_pose_detector_service.dart';
 import 'package:gainz/screens/home/service/post_detector_service.dart';
-import 'package:gainz/screens/home/widget/calculating_workout_bottom_sheet.dart';
 import 'package:get/get.dart';
 
 enum WorkoutStatus { init, starting, started, paused, resumed }

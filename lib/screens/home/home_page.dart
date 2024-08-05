@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   final PoseDetectionViewModel controller = Get.put(PoseDetectionViewModel());
+
   HomePage({super.key});
 
   Future<void> _initializeCamera() async {
