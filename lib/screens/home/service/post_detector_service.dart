@@ -1,7 +1,7 @@
 import 'dart:isolate';
-import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gainz/resource/logger/logger.dart';
 import 'package:gainz/resource/painter/pose_painter.dart';
@@ -19,15 +19,56 @@ class DetectPoseParam {
   final InputImageMetadata metadata;
   final Uint8List bytes;
   final SendPort sendPort;
+  final RootIsolateToken token;
 
-  DetectPoseParam(this.metadata, this.bytes, this.sendPort);
+  DetectPoseParam(this.metadata, this.bytes, this.sendPort, this.token);
 }
 
 class DetectPoseResult {
-  final CustomPaint customPaint;
   final List<Pose> poses;
 
-  DetectPoseResult(this.customPaint, this.poses);
+  DetectPoseResult(this.poses);
+}
+
+extension PoseSerialization on Pose {
+  Map<String, dynamic> toJson() {
+    return {
+      'landmarks': landmarks.map((type, landmark) =>
+          MapEntry(type.index.toString(), landmark.toJson())),
+    };
+  }
+
+  static Pose fromJson(Map<String, dynamic> json) {
+    final landmarks = (json['landmarks'] as Map<String, dynamic>).map(
+      (type, landmarkJson) => MapEntry(
+        PoseLandmarkType.values[int.parse(type)],
+        PoseLandmark.fromJson(landmarkJson),
+      ),
+    );
+    return Pose(landmarks: landmarks);
+  }
+}
+
+extension PoseLandmarkSerialization on PoseLandmark {
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type.index,
+      'x': x,
+      'y': y,
+      'z': z,
+      'likelihood': likelihood,
+    };
+  }
+
+  static PoseLandmark fromJson(Map<String, dynamic> json) {
+    return PoseLandmark(
+      type: PoseLandmarkType.values[json['type'].toInt()],
+      x: json['x'],
+      y: json['y'],
+      z: json['z'],
+      likelihood: json['likelihood'] ?? 0.0,
+    );
+  }
 }
 
 class PoseDetectorService {
@@ -37,55 +78,69 @@ class PoseDetectorService {
 
   PoseDetectorService(this._iPoseDetectorService);
 
-  final PoseDetector _poseDetector = PoseDetector(
-    options: PoseDetectorOptions(),
-  );
-
   void detectPose(CameraImage image, CameraDescription camera,
       CameraController cameraController) async {
     final inputImage =
         ImageUtil.inputImageFromCameraImage(image, camera, cameraController);
-    if (inputImage == null) return;
-    inputImage.metadata;
-    inputImage.bytes;
+    if (inputImage == null ||
+        inputImage.metadata == null && inputImage.bytes == null) return;
 
-    final poses = await _poseDetector.processImage(inputImage);
-    if (inputImage.metadata?.size != null &&
-        inputImage.metadata?.rotation != null) {
+    // Create a ReceivePort to get the result back from the Isolate
+    final receivePort = ReceivePort();
+    final param = DetectPoseParam(
+      inputImage.metadata!,
+      inputImage.bytes!,
+      receivePort.sendPort,
+      RootIsolateToken.instance!,
+    );
+
+    // Spawn an isolate to process the image
+    await Isolate.spawn<DetectPoseParam>(_processPose, param);
+
+    receivePort.listen((result) {
+      // Close the receive port
+      receivePort.close();
       final painter = PosePainter(
-        poses,
+        result.poses,
         inputImage.metadata!.size,
         inputImage.metadata!.rotation,
-        CameraLensDirection.back, // might need to change this
+        CameraLensDirection.back,
       );
-      // send using thread
-      checkTheStatusOfPoses(poses);
-      _iPoseDetectorService.onPoseDetected(CustomPaint(painter: painter));
-    }
+      _iPoseDetectorService.onPoseDetected(CustomPaint(
+        painter: painter,
+      ));
+      checkTheStatusOfPoses(result.poses);
+    });
   }
 
-  // use
-  Future<void> detectPoseInIsolate(DetectPoseParam param) async {
+  static Future<void> _processPose(DetectPoseParam param) async {
+    BackgroundIsolateBinaryMessenger.ensureInitialized(param.token);
+    final poseDetector = PoseDetector(options: PoseDetectorOptions());
+
+    // Create InputImage from bytes and metadata
     final inputImage = InputImage.fromBytes(
       bytes: param.bytes,
       metadata: param.metadata,
     );
-    final poses = await _poseDetector.processImage(inputImage);
+
+    // Process the image to detect poses
+    final poses = await poseDetector.processImage(inputImage);
+
     if (inputImage.metadata?.size != null &&
         inputImage.metadata?.rotation != null) {
-      final painter = PosePainter(
-        poses,
-        inputImage.metadata!.size,
-        inputImage.metadata!.rotation,
-        CameraLensDirection.back, // might need to change this
-      );
-      // send using thread
-      final result = DetectPoseResult(CustomPaint(painter: painter), poses);
-      param.sendPort.send(result);
+      // final painter = PosePainter(
+      //   poses,
+      //   inputImage.metadata!.size,
+      //   inputImage.metadata!.rotation,
+      //   CameraLensDirection.back,
+      // );
+
+      // Send the result back to the main isolate
+      param.sendPort.send(DetectPoseResult(poses));
     }
   }
 
-  void checkTheStatusOfPoses(List<Pose> poses) async {
+  void checkTheStatusOfPoses(List<Pose> poses) {
     JumpingJackStatus? currentJumpingJackStatus;
     if (poses.isEmpty) {
       appLogger.debug('No Person Found');
