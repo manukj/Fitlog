@@ -3,23 +3,26 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/widgets.dart';
+import 'package:gainz/resource/logger/logger.dart';
 import 'package:gainz/screens/home/service/i_pose_detector_service.dart';
 import 'package:gainz/screens/home/service/post_detector_service.dart';
+import 'package:gainz/screens/home/widget/calculating_workout_bottom_sheet.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
-enum WorkoutStatus { init, starting, started, paused, resumed, finished }
+enum WorkoutStatus { init, starting, started, paused, resumed }
 
 class CameraViewModel extends GetxController implements IPoseDetectorService {
-  final _debouncer = Debouncer(delay: const Duration(milliseconds: 100));
   late final PoseDetectorService _poseDetectorService;
-  Timer? _timer;
   late List<CameraDescription> cameras;
   CameraController? controller;
   Future<void>? initializeControllerFuture;
   Rx<CustomPaint?> customPaint = Rx<CustomPaint?>(null);
   Rx<bool> showCountDown = Rx<bool>(false);
+  Rx<bool> calculatingTotalRep = Rx<bool>(false);
+  Rx<num> totalJumpingJack = Rx<num>(0);
   Rx<WorkoutStatus> workoutStatus = Rx<WorkoutStatus>(WorkoutStatus.init);
+  int totalPoseCount = 0;
+  int totalDetectedPoseCount = 0;
 
   CameraViewModel() {
     _poseDetectorService = PoseDetectorService(this);
@@ -46,14 +49,13 @@ class CameraViewModel extends GetxController implements IPoseDetectorService {
   Future<void> startWorkout() async {
     workoutStatus.value = WorkoutStatus.starting;
     await _startCountDown();
-    _detectPoses();
+    // _detectPoses();
   }
 
   Future<void> pauseWorkout() async {
     await controller!.stopImageStream();
     customPaint.value = const CustomPaint();
     workoutStatus.value = WorkoutStatus.paused;
-    _timer?.cancel();
   }
 
   void resumeWorkout() {
@@ -63,12 +65,14 @@ class CameraViewModel extends GetxController implements IPoseDetectorService {
   }
 
   Future<void> finishWorkout() async {
-    controller!.stopImageStream();
-    _timer?.cancel();
-    Future.delayed(const Duration(seconds: 3), () {
-      customPaint.value = null;
-      workoutStatus.value = WorkoutStatus.finished;
-    });
+    // controller!.stopImageStream();
+    calculatingTotalRep.value = true;
+    workoutStatus.value = WorkoutStatus.init;
+    Get.bottomSheet(
+      const CalculatingWorkoutBottomSheet(),
+      isDismissible: false,
+      enableDrag: false,
+    );
   }
 
   Future<void> restartDetecting() async {
@@ -86,20 +90,18 @@ class CameraViewModel extends GetxController implements IPoseDetectorService {
   void _detectPoses() {
     _poseDetectorService.resetCount();
     controller!.startImageStream((image) {
-      _timer = Timer.periodic(const Duration(seconds: 200), (timer) {
-        _poseDetectorService.detectPose(
-          image,
-          controller!.description,
-          controller!,
-        );
-      });
+      totalPoseCount++;
+      _poseDetectorService.detectPose(
+        image,
+        controller!.description,
+        controller!,
+      );
     });
   }
 
   @override
   void onClose() {
     controller?.dispose();
-    _timer?.cancel();
     super.onClose();
   }
 
@@ -107,9 +109,13 @@ class CameraViewModel extends GetxController implements IPoseDetectorService {
   void noPersonFound() {}
 
   @override
-  void onPoseDetected(CustomPaint customPaint) async {
-    _debouncer.call(() {
-      this.customPaint.value = customPaint;
-    });
+  void onPoseDetected() async {
+    totalDetectedPoseCount++;
+    if (totalDetectedPoseCount == totalPoseCount) {
+      appLogger.log('All poses detected');
+      if (Get.isBottomSheetOpen ?? false) {
+        Get.back();
+      }
+    }
   }
 }

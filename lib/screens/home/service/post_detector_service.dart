@@ -4,7 +4,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gainz/resource/logger/logger.dart';
-import 'package:gainz/resource/painter/pose_painter.dart';
 import 'package:gainz/resource/util/image_util.dart';
 import 'package:gainz/screens/home/service/i_pose_detector_service.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
@@ -80,36 +79,36 @@ class PoseDetectorService {
 
   void detectPose(CameraImage image, CameraDescription camera,
       CameraController cameraController) async {
-    final inputImage =
-        ImageUtil.inputImageFromCameraImage(image, camera, cameraController);
-    if (inputImage == null ||
-        inputImage.metadata == null && inputImage.bytes == null) return;
-
-    // Create a ReceivePort to get the result back from the Isolate
-    final receivePort = ReceivePort();
-    final param = DetectPoseParam(
-      inputImage.metadata!,
-      inputImage.bytes!,
-      receivePort.sendPort,
-      RootIsolateToken.instance!,
-    );
-
-    // Spawn an isolate to process the image
-    await Isolate.spawn<DetectPoseParam>(_processPose, param);
-
-    receivePort.listen((result) {
-      // Close the receive port
-      receivePort.close();
-      final painter = PosePainter(
-        result.poses,
-        inputImage.metadata!.size,
-        inputImage.metadata!.rotation,
-        CameraLensDirection.back,
+    var receivePortImage = await ImageUtil.inputImageFromCameraImage(
+        image, camera, cameraController);
+    receivePortImage.listen((data) async {
+      receivePortImage.close();
+      if (data == null) return;
+      InputImage inputImage = data;
+      if (inputImage == null ||
+          inputImage.metadata == null && inputImage.bytes == null) return;
+      // Create a ReceivePort to get the result back from the Isolate
+      final receivePort = ReceivePort();
+      final param = DetectPoseParam(
+        inputImage.metadata!,
+        inputImage.bytes!,
+        receivePort.sendPort,
+        RootIsolateToken.instance!,
       );
-      _iPoseDetectorService.onPoseDetected(CustomPaint(
-        painter: painter,
-      ));
-      checkTheStatusOfPoses(result.poses);
+      // Spawn an isolate to process the image
+      await Isolate.spawn<DetectPoseParam>(_processPose, param);
+      receivePort.listen((result) {
+        // Close the receive port
+        receivePort.close();
+        // final painter = PosePainter(
+        //   result.poses,
+        //   inputImage.metadata!.size,
+        //   inputImage.metadata!.rotation,
+        //   CameraLensDirection.back,
+        // );
+        _iPoseDetectorService.onPoseDetected();
+        checkTheStatusOfPoses(result.poses);
+      });
     });
   }
 

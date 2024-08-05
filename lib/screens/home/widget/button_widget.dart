@@ -13,9 +13,7 @@ class WorkoutStatusButton extends GetView<CameraViewModel> {
           controller.workoutStatus.value == WorkoutStatus.starting) {
         return _buildStartButton(controller.workoutStatus.value);
       }
-      if (controller.workoutStatus.value == WorkoutStatus.finished) {
-        return _buildFinishedButton();
-      }
+
       return _buildPauseAndStopButton(controller.workoutStatus.value);
     });
   }
@@ -29,15 +27,6 @@ class WorkoutStatusButton extends GetView<CameraViewModel> {
             },
       text:
           status == WorkoutStatus.starting ? "Starting....." : "Start Workout",
-    );
-  }
-
-  Widget _buildFinishedButton() {
-    return PrimaryButton(
-      onPressed: () {
-        controller.restartDetecting();
-      },
-      text: "Restart",
     );
   }
 

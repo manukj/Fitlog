@@ -1,6 +1,5 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:gainz/common_widget/primary_button.dart';
 import 'package:gainz/resource/constants/image_path.dart';
 import 'package:gainz/screens/home/view_model/camera_view_model.dart';
 import 'package:gainz/screens/home/widget/button_widget.dart';
@@ -14,52 +13,30 @@ class CameraWidget extends GetView<CameraViewModel> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CameraPreview(
+        Obx(() {
+          return AnimatedContainer(
+            duration: const Duration(
+              milliseconds: 1500,
+            ),
+            height: controller.workoutStatus.value == WorkoutStatus.init
+                ? Get.height
+                : Get.height / 2,
+            width: double.infinity,
+            child: CameraPreview(
               controller.controller!,
-              child: Obx(() {
-                return controller.customPaint.value ?? Container();
-              }),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            const WorkoutStatusButton(),
-          ],
+          );
+        }),
+        const Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.all(10.0),
+            child: WorkoutStatusButton(),
+          ),
         ),
         _buildCountDownAnimation(),
       ],
     );
-  }
-
-  Widget _buildButton() {
-    return Row(
-      children: [
-        PrimaryButton(
-          onPressed: () {
-            controller.startWorkout();
-          },
-          child: const Icon(Icons.pause),
-        ),
-        PrimaryButton(
-          onPressed: () {
-            controller.startWorkout();
-          },
-          child: const Icon(Icons.pause),
-        )
-      ],
-    );
-    // return Obx(() {
-    //   return PrimaryButton(
-    //     onPressed: () {
-    //       controller.startDetecting();
-    //     },
-    //     text:
-    //         controller.workoutStarted.value ? "Stop Workout" : "Start Workout",
-    //   );
-    // });
   }
 
   Widget _buildCountDownAnimation() {
