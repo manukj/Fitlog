@@ -102,7 +102,7 @@ class PoseDetectorService {
         //   inputImage.metadata!.rotation,
         //   CameraLensDirection.back,
         // );
-        _iPoseDetectorService.onPoseDetected();
+        _iPoseDetectorService.onPoseDetected(totalJumpingJacks);
         checkTheStatusOfPoses(result.poses);
       });
     });

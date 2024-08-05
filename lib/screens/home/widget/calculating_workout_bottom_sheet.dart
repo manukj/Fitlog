@@ -23,22 +23,12 @@ class CalculatingWorkoutBottomSheet extends GetView<PoseDetectorViewModel> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const SizedBox(height: 20),
-          const Text(
-            'Calculating total workout,\n Please wait....',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Lottie.asset(ImagePath.jumpingJackAnimation, height: 250),
-          const SizedBox(height: 20),
+          _buildHeader(),
           Obx(
             () {
               return AnimatedFlipCounter(
                 value: controller.totalJumpingJack.value,
-                prefix: "Total ",
+                prefix: "Total Reps : ",
                 textStyle: const TextStyle(
                   fontSize: 29,
                   fontWeight: FontWeight.bold,
@@ -50,5 +40,28 @@ class CalculatingWorkoutBottomSheet extends GetView<PoseDetectorViewModel> {
         ],
       ),
     );
+  }
+
+  _buildHeader() {
+    return Obx(() {
+      return (controller.calculatingTotalWorkout.value)
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 20),
+                const Text(
+                  'Calculating total workout,\n Please wait....',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Lottie.asset(ImagePath.jumpingJackAnimation, height: 250),
+                const SizedBox(height: 20),
+              ],
+            )
+          : Lottie.asset(ImagePath.successAnimation, height: 250);
+    });
   }
 }

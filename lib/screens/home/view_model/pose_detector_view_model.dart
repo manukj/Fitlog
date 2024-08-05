@@ -6,9 +6,11 @@ import 'package:flutter/widgets.dart';
 import 'package:gainz/resource/logger/logger.dart';
 import 'package:gainz/screens/home/service/i_pose_detector_service.dart';
 import 'package:gainz/screens/home/service/post_detector_service.dart';
+import 'package:gainz/screens/home/widget/calculating_workout_bottom_sheet.dart';
+import 'package:gainz/screens/record/record.dart';
 import 'package:get/get.dart';
 
-enum WorkoutStatus { init, starting, started, paused, resumed }
+enum WorkoutStatus { init, starting, started }
 
 class PoseDetectorViewModel extends GetxController
     implements IPoseDetectorService {
@@ -18,7 +20,7 @@ class PoseDetectorViewModel extends GetxController
   Future<void>? initializeControllerFuture;
   Rx<CustomPaint?> customPaint = Rx<CustomPaint?>(null);
   Rx<bool> showCountDown = Rx<bool>(false);
-  Rx<bool> calculatingTotalRep = Rx<bool>(false);
+  Rx<bool> calculatingTotalWorkout = Rx<bool>(false);
   Rx<num> totalJumpingJack = Rx<num>(0);
   Rx<WorkoutStatus> workoutStatus = Rx<WorkoutStatus>(WorkoutStatus.init);
   int totalPoseCount = 0;
@@ -49,34 +51,18 @@ class PoseDetectorViewModel extends GetxController
   Future<void> startWorkout() async {
     workoutStatus.value = WorkoutStatus.starting;
     await _startCountDown();
-    // _detectPoses();
-  }
-
-  Future<void> pauseWorkout() async {
-    await controller!.stopImageStream();
-    customPaint.value = const CustomPaint();
-    workoutStatus.value = WorkoutStatus.paused;
-  }
-
-  void resumeWorkout() {
-    workoutStatus.value = WorkoutStatus.resumed;
-    _startCountDown();
     _detectPoses();
   }
 
   Future<void> finishWorkout() async {
-    // controller!.stopImageStream();
-    calculatingTotalRep.value = true;
+    controller!.stopImageStream();
+    calculatingTotalWorkout.value = true;
     workoutStatus.value = WorkoutStatus.init;
-    // Get.bottomSheet(
-    //   const CalculatingWorkoutBottomSheet(),
-    //   isDismissible: false,
-    //   enableDrag: false,
-    // );
-  }
-
-  Future<void> restartDetecting() async {
-    workoutStatus.value = WorkoutStatus.init;
+    Get.bottomSheet(
+      const CalculatingWorkoutBottomSheet(),
+      isDismissible: false,
+      enableDrag: false,
+    );
   }
 
   Future<void> _startCountDown() async {
@@ -109,13 +95,15 @@ class PoseDetectorViewModel extends GetxController
   void noPersonFound() {}
 
   @override
-  void onPoseDetected() async {
+  void onPoseDetected(int totalCount) async {
+    totalJumpingJack.value = totalCount;
     totalDetectedPoseCount++;
     if (totalDetectedPoseCount == totalPoseCount) {
       appLogger.log('All poses detected');
-      if (Get.isBottomSheetOpen ?? false) {
-        Get.back();
-      }
+      calculatingTotalWorkout.value = false;
+      Future.delayed(const Duration(seconds: 2), () {
+        Get.to(const RecordPage());
+      });
     }
   }
 }

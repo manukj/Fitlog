@@ -1,5 +1,5 @@
 abstract class IPoseDetectorService {
   void noPersonFound();
 
-  void onPoseDetected();
+  void onPoseDetected(int totalJumpingJacks);
 }
