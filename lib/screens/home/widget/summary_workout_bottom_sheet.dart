@@ -1,8 +1,7 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:gainz/common_widget/primary_button.dart';
-import 'package:gainz/resource/constants/image_path.dart';
-import 'package:gainz/resource/theme/theme.dart';
+import 'package:gainz/resource/constants/assets_path.dart';
 import 'package:gainz/screens/record/record.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -33,7 +32,7 @@ class SummaryWorkoutBottomSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Lottie.asset(
-                  ImagePath.successAnimation,
+                  AssetsPath.successAnimation,
                   height: 200,
                 ),
                 AnimatedFlipCounter(
@@ -67,7 +66,7 @@ class SummaryWorkoutBottomSheet extends StatelessWidget {
           ),
         ),
         Lottie.asset(
-          ImagePath.jumpingJackAnimation,
+          AssetsPath.jumpingJackAnimation,
           height: 200,
         ),
         const SizedBox(height: 20),

@@ -1,8 +1,5 @@
-import 'dart:isolate';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:gainz/resource/logger/logger.dart';
 import 'package:gainz/resource/painter/pose_painter.dart';
 import 'package:gainz/resource/util/image_util.dart';
@@ -13,62 +10,6 @@ enum JumpingJackStatus {
   standing,
   jumpOut, // when legs are spread and hands are above
   jumpIn, // when you bring your legs together and lowering the arm
-}
-
-class DetectPoseParam {
-  final InputImageMetadata metadata;
-  final Uint8List bytes;
-  final SendPort sendPort;
-  final RootIsolateToken token;
-
-  DetectPoseParam(this.metadata, this.bytes, this.sendPort, this.token);
-}
-
-class DetectPoseResult {
-  final List<Pose> poses;
-
-  DetectPoseResult(this.poses);
-}
-
-extension PoseSerialization on Pose {
-  Map<String, dynamic> toJson() {
-    return {
-      'landmarks': landmarks.map((type, landmark) =>
-          MapEntry(type.index.toString(), landmark.toJson())),
-    };
-  }
-
-  static Pose fromJson(Map<String, dynamic> json) {
-    final landmarks = (json['landmarks'] as Map<String, dynamic>).map(
-      (type, landmarkJson) => MapEntry(
-        PoseLandmarkType.values[int.parse(type)],
-        PoseLandmark.fromJson(landmarkJson),
-      ),
-    );
-    return Pose(landmarks: landmarks);
-  }
-}
-
-extension PoseLandmarkSerialization on PoseLandmark {
-  Map<String, dynamic> toJson() {
-    return {
-      'type': type.index,
-      'x': x,
-      'y': y,
-      'z': z,
-      'likelihood': likelihood,
-    };
-  }
-
-  static PoseLandmark fromJson(Map<String, dynamic> json) {
-    return PoseLandmark(
-      type: PoseLandmarkType.values[json['type'].toInt()],
-      x: json['x'],
-      y: json['y'],
-      z: json['z'],
-      likelihood: json['likelihood'] ?? 0.0,
-    );
-  }
 }
 
 class PoseDetectorService {
@@ -99,11 +40,9 @@ class PoseDetectorService {
       inputImage.metadata!.rotation,
       CameraLensDirection.back,
     );
-    _iPoseDetectorService.onPoseDetected(
-        totalJumpingJacks,
-        CustomPaint(
-          painter: painter,
-        ));
+    _iPoseDetectorService.onPoseDetected(CustomPaint(
+      painter: painter,
+    ));
 
     _isBusy = false;
   }
@@ -114,20 +53,33 @@ class PoseDetectorService {
       appLogger.debug('No Person Found');
       return _iPoseDetectorService.noPersonFound();
     }
+
     final Pose pose = poses.first;
 
-    final PoseLandmark leftShoulder =
-        pose.landmarks[PoseLandmarkType.leftShoulder]!;
-    final PoseLandmark rightShoulder =
-        pose.landmarks[PoseLandmarkType.rightShoulder]!;
-    final PoseLandmark leftHip = pose.landmarks[PoseLandmarkType.leftHip]!;
-    final PoseLandmark rightHip = pose.landmarks[PoseLandmarkType.rightHip]!;
-    final PoseLandmark leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle]!;
-    final PoseLandmark rightAnkle =
-        pose.landmarks[PoseLandmarkType.rightAnkle]!;
-    final PoseLandmark leftWrist = pose.landmarks[PoseLandmarkType.leftWrist]!;
-    final PoseLandmark rightWrist =
-        pose.landmarks[PoseLandmarkType.rightWrist]!;
+    final PoseLandmark? leftShoulder =
+        pose.landmarks[PoseLandmarkType.leftShoulder];
+    final PoseLandmark? rightShoulder =
+        pose.landmarks[PoseLandmarkType.rightShoulder];
+    final PoseLandmark? leftHip = pose.landmarks[PoseLandmarkType.leftHip];
+    final PoseLandmark? rightHip = pose.landmarks[PoseLandmarkType.rightHip];
+    final PoseLandmark? leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle];
+    final PoseLandmark? rightAnkle =
+        pose.landmarks[PoseLandmarkType.rightAnkle];
+    final PoseLandmark? leftWrist = pose.landmarks[PoseLandmarkType.leftWrist];
+    final PoseLandmark? rightWrist =
+        pose.landmarks[PoseLandmarkType.rightWrist];
+
+    if (leftShoulder == null ||
+        rightShoulder == null ||
+        leftHip == null ||
+        rightHip == null ||
+        leftAnkle == null ||
+        rightAnkle == null ||
+        leftWrist == null ||
+        rightWrist == null) {
+      appLogger.debug('One or more landmarks are missing');
+      return;
+    }
 
     final double shoulderDistance = (leftShoulder.x - rightShoulder.x).abs();
     final double hipDistance = (leftHip.x - rightHip.x).abs();
@@ -149,11 +101,12 @@ class PoseDetectorService {
     }
 
     appLogger.debug(
-        'Jumping Jacks: previous $previousJumpingJackStatus current $currentJumpingJackStatus ');
+        'Jumping Jacks: previous $previousJumpingJackStatus current $currentJumpingJackStatus');
 
     if (previousJumpingJackStatus == JumpingJackStatus.jumpOut &&
         currentJumpingJackStatus == JumpingJackStatus.jumpIn) {
       totalJumpingJacks++;
+      _iPoseDetectorService.onJumpingJackCompleted(totalJumpingJacks);
       appLogger.debug('Total Jumping Jacks: $totalJumpingJacks');
     }
 
@@ -169,6 +122,9 @@ class PoseDetectorService {
 
   void resetCount() {
     totalJumpingJacks = 0;
+    previousJumpingJackStatus = JumpingJackStatus.standing;
+    _canProcess = true;
+    _isBusy = false;
     appLogger.debug('Total Jumping Jacks: reset $totalJumpingJacks');
   }
 

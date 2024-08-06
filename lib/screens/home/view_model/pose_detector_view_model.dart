@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/widgets.dart';
+import 'package:gainz/resource/audio_player/audio_player_helper.dart';
 import 'package:gainz/screens/home/service/i_pose_detector_service.dart';
 import 'package:gainz/screens/home/service/post_detector_service.dart';
 import 'package:gainz/screens/home/widget/summary_workout_bottom_sheet.dart';
@@ -12,6 +13,8 @@ enum WorkoutStatus { init, starting, started }
 
 class PoseDetectorViewModel extends GetxController
     implements IPoseDetectorService {
+  final AudioPlayerHelper audioPlayerHelper = Get.put(AudioPlayerHelper());
+
   late final PoseDetectorService _poseDetectorService;
   late List<CameraDescription> cameras;
   CameraController? controller;
@@ -88,6 +91,7 @@ class PoseDetectorViewModel extends GetxController
   void onClose() {
     controller?.dispose();
     _poseDetectorService.dispose();
+    audioPlayerHelper.dispose();
     super.onClose();
   }
 
@@ -107,8 +111,13 @@ class PoseDetectorViewModel extends GetxController
   }
 
   @override
-  void onPoseDetected(int totalCount, CustomPaint paint) async {
-    totalJumpingJack.value = totalCount;
+  void onPoseDetected(CustomPaint paint) async {
     customPaint.value = paint;
+  }
+
+  @override
+  void onJumpingJackCompleted(int count) {
+    totalJumpingJack.value = count;
+    audioPlayerHelper.play();
   }
 }
