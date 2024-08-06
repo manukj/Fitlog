@@ -158,6 +158,11 @@ class PoseDetectorService {
     }
 
     if (currentJumpingJackStatus != null) {
+      if (currentJumpingJackStatus == JumpingJackStatus.jumpOut) {
+        _iPoseDetectorService.onJumpingUp();
+      } else if (currentJumpingJackStatus == JumpingJackStatus.jumpIn) {
+        _iPoseDetectorService.onJumpingDown();
+      }
       previousJumpingJackStatus = currentJumpingJackStatus;
     }
   }

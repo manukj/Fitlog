@@ -52,7 +52,35 @@ class CameraWidget extends GetView<PoseDetectorViewModel> {
           ),
         ),
         _buildCountDownAnimation(),
+        _buildInformationMessage(),
       ],
+    );
+  }
+
+  Widget _buildInformationMessage() {
+    return Obx(
+      () {
+        if (controller.informationMessage.value.isNotEmpty) {
+          return Container(
+            height: 100,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              controller.informationMessage.value,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+          );
+        } else {
+          return Container();
+        }
+      },
     );
   }
 

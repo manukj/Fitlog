@@ -13,9 +13,9 @@ class WorkoutStatusButton extends GetView<PoseDetectorViewModel> {
       if (controller.workoutStatus.value == WorkoutStatus.init ||
           controller.workoutStatus.value == WorkoutStatus.starting) {
         return _buildStartButton(controller.workoutStatus.value);
+      } else {
+        return _buildStopButton(controller.workoutStatus.value);
       }
-
-      return _buildStopButton(controller.workoutStatus.value);
     });
   }
 

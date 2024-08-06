@@ -20,6 +20,7 @@ class PoseDetectorViewModel extends GetxController
   Rx<bool> showCountDown = Rx<bool>(false);
   Rx<num> totalJumpingJack = Rx<num>(0);
   Rx<WorkoutStatus> workoutStatus = Rx<WorkoutStatus>(WorkoutStatus.init);
+  Rx<String> informationMessage = Rx<String>('');
 
   PoseDetectorViewModel() {
     _poseDetectorService = PoseDetectorService(this);
@@ -53,12 +54,14 @@ class PoseDetectorViewModel extends GetxController
     controller!.stopImageStream();
     workoutStatus.value = WorkoutStatus.init;
     Get.bottomSheet(
-      const SummaryWorkoutBottomSheet(),
+      SummaryWorkoutBottomSheet(totalJumpingJack: totalJumpingJack.value),
       isDismissible: false,
       enableDrag: true,
     );
     Future.delayed(const Duration(seconds: 1), () {
       customPaint.value = null;
+      informationMessage.value = '';
+      totalJumpingJack.value = 0;
     });
   }
 
@@ -89,11 +92,23 @@ class PoseDetectorViewModel extends GetxController
   }
 
   @override
-  void noPersonFound() {}
+  void noPersonFound() {
+    informationMessage.value = 'No person found';
+  }
+
+  @override
+  void onJumpingUp() {
+    informationMessage.value = 'Jumping up';
+  }
+
+  @override
+  void onJumpingDown() {
+    informationMessage.value = 'Jumping down';
+  }
 
   @override
   void onPoseDetected(int totalCount, CustomPaint paint) async {
     totalJumpingJack.value = totalCount;
-    this.customPaint.value = paint;
+    customPaint.value = paint;
   }
 }

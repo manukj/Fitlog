@@ -4,4 +4,8 @@ abstract class IPoseDetectorService {
   void noPersonFound();
 
   void onPoseDetected(int totalJumpingJacks, CustomPaint customPaint);
+  
+  void onJumpingUp();
+
+  void onJumpingDown();
 }
