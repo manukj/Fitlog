@@ -5,16 +5,16 @@ import 'package:gainz/resource/theme/theme.dart';
 import 'package:gainz/screens/home/view_model/pose_detector_view_model.dart';
 import 'package:get/get.dart';
 
-class StopwatchWidget extends StatefulWidget {
+class CountDownAndTimer extends StatefulWidget {
   final bool start;
 
-  const StopwatchWidget({super.key, required this.start});
+  const CountDownAndTimer({super.key, required this.start});
 
   @override
-  State<StopwatchWidget> createState() => _StopwatchWidgetState();
+  State<CountDownAndTimer> createState() => _CountDownAndTimerState();
 }
 
-class _StopwatchWidgetState extends State<StopwatchWidget> {
+class _CountDownAndTimerState extends State<CountDownAndTimer> {
   final PoseDetectorViewModel viewModel = Get.find<PoseDetectorViewModel>();
   late int _secondsElapsed;
   late final Stopwatch _stopwatch;
@@ -38,7 +38,7 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
   }
 
   @override
-  void didUpdateWidget(covariant StopwatchWidget oldWidget) {
+  void didUpdateWidget(covariant CountDownAndTimer oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.start != widget.start) {
       _handleStartReset();
@@ -79,7 +79,7 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
       child: Center(
         child: AnimatedOpacity(
           opacity: _isAnimating ? 1 : 0,
-          duration: const Duration(seconds: 2),
+          duration: const Duration(seconds: 4),
           child: Column(
             children: [
               AnimatedFlipCounter(

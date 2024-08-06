@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gainz/resource/constants/image_path.dart';
 import 'package:gainz/screens/home/view_model/pose_detector_view_model.dart';
 import 'package:gainz/screens/home/widget/button_widget.dart';
-import 'package:gainz/screens/home/widget/stop_wathch.dart';
+import 'package:gainz/screens/home/widget/count_down_and_timer.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
@@ -37,21 +37,18 @@ class CameraWidget extends GetView<PoseDetectorViewModel> {
             ),
           );
         }),
-        Align(
-          alignment: Alignment.topCenter,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Obx(() {
-                  return StopwatchWidget(
-                    start: controller.workoutStatus.value != WorkoutStatus.init,
-                  );
-                }),
-                const WorkoutStatusButton(),
-              ],
-            ),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Obx(() {
+                return CountDownAndTimer(
+                  start: controller.workoutStatus.value != WorkoutStatus.init,
+                );
+              }),
+              const WorkoutStatusButton(),
+            ],
           ),
         ),
         _buildCountDownAnimation(),
