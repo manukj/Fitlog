@@ -27,7 +27,7 @@ class AuthViewModel extends GetxController {
   }
 
   void _setUserDetails(User? user) {
-    if (user != null) {
+    if (user!= null) {
       userName.value = user.displayName ?? '';
       userEmail.value = user.email ?? '';
       userPhotoUrl.value = user.photoURL ?? '';

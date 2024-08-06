@@ -61,19 +61,22 @@ class CameraWidget extends GetView<PoseDetectorViewModel> {
     return Obx(
       () {
         if (controller.informationMessage.value.isNotEmpty) {
-          return Container(
-            height: 100,
-            alignment: Alignment.center,
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              controller.informationMessage.value,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
+          return Positioned(
+            top: 80,
+            child: Container(
+              height: 110,
+              width: Get.width,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                controller.informationMessage.value,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
               ),
             ),
           );

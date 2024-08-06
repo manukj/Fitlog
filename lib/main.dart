@@ -6,7 +6,7 @@ import 'package:gainz/resource/auth/auth_view_model.dart';
 import 'package:get/get.dart';
 
 void main() async {
-  initalise();
+  await initalise();
   runApp(const App());
 }
 
