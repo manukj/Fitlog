@@ -8,8 +8,8 @@ import 'package:gainz/screens/record/record.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-class CalculatingWorkoutBottomSheet extends GetView<PoseDetectorViewModel> {
-  const CalculatingWorkoutBottomSheet({super.key});
+class SummaryWorkoutBottomSheet extends GetView<PoseDetectorViewModel> {
+  const SummaryWorkoutBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
