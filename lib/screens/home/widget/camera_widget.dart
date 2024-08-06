@@ -25,11 +25,14 @@ class CameraWidget extends GetView<PoseDetectorViewModel> {
               ),
               height: isInitState ? Get.height : Get.height / 2,
               width: Get.width,
-              child: CameraPreview(
-                controller.controller!,
-                child: Obx(() {
-                  return controller.customPaint.value ?? Container();
-                }),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: CameraPreview(
+                  controller.controller!,
+                  child: Obx(() {
+                    return controller.customPaint.value ?? Container();
+                  }),
+                ),
               ),
             ),
           );
@@ -37,7 +40,7 @@ class CameraWidget extends GetView<PoseDetectorViewModel> {
         Align(
           alignment: Alignment.topCenter,
           child: Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

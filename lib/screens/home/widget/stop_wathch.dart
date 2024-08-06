@@ -2,6 +2,8 @@ import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:gainz/resource/theme/theme.dart';
+import 'package:gainz/screens/home/view_model/pose_detector_view_model.dart';
+import 'package:get/get.dart';
 
 class StopwatchWidget extends StatefulWidget {
   final bool start;
@@ -13,6 +15,7 @@ class StopwatchWidget extends StatefulWidget {
 }
 
 class _StopwatchWidgetState extends State<StopwatchWidget> {
+  final PoseDetectorViewModel viewModel = Get.find<PoseDetectorViewModel>();
   late int _secondsElapsed;
   late final Stopwatch _stopwatch;
   late final Ticker _ticker;
@@ -47,7 +50,7 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
       setState(() {
         _isAnimating = true;
       });
-      Future.delayed(Duration(seconds: 5), () {
+      Future.delayed(const Duration(seconds: 5), () {
         if (widget.start) {
           // Check again in case the flag changed during the delay
           _stopwatch.start();
@@ -77,15 +80,32 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
         child: AnimatedOpacity(
           opacity: _isAnimating ? 1 : 0,
           duration: const Duration(seconds: 2),
-          child: AnimatedFlipCounter(
-            prefix: "Time : ",
-            duration: const Duration(milliseconds: 500),
-            value: _secondsElapsed,
-            textStyle: const TextStyle(
-              fontSize: 48,
-              fontWeight: FontWeight.bold,
-              color: AppThemedata.onSuraface,
-            ),
+          child: Column(
+            children: [
+              AnimatedFlipCounter(
+                prefix: "Time : ",
+                suffix: " s",
+                duration: const Duration(milliseconds: 500),
+                value: _secondsElapsed,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
+              ),
+              Obx(() {
+                return AnimatedFlipCounter(
+                  prefix: "Total Reps : ",
+                  duration: const Duration(milliseconds: 500),
+                  value: viewModel.totalJumpingJack.value,
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: AppThemedata.onSuraface,
+                  ),
+                );
+              }),
+            ],
           ),
         ),
       ),

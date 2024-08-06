@@ -1,8 +1,10 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
+import 'package:gainz/common_widget/primary_button.dart';
 import 'package:gainz/resource/constants/image_path.dart';
 import 'package:gainz/resource/theme/theme.dart';
 import 'package:gainz/screens/home/view_model/pose_detector_view_model.dart';
+import 'package:gainz/screens/record/record.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
@@ -12,7 +14,8 @@ class CalculatingWorkoutBottomSheet extends GetView<PoseDetectorViewModel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      width: Get.width,
       decoration: const BoxDecoration(
         color: AppThemedata.surface,
         borderRadius: BorderRadius.only(
@@ -21,9 +24,12 @@ class CalculatingWorkoutBottomSheet extends GetView<PoseDetectorViewModel> {
         ),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          _buildHeader(),
+          Lottie.asset(
+            ImagePath.successAnimation,
+            height: 200,
+          ),
           Obx(
             () {
               return AnimatedFlipCounter(
@@ -36,32 +42,14 @@ class CalculatingWorkoutBottomSheet extends GetView<PoseDetectorViewModel> {
               );
             },
           ),
-          const SizedBox(height: 20),
+          PrimaryButton(
+            onPressed: () {
+              Get.to(const RecordPage());
+            },
+            text: "Save Progress",
+          ),
         ],
       ),
     );
-  }
-
-  _buildHeader() {
-    return Obx(() {
-      return (controller.calculatingTotalWorkout.value)
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 20),
-                const Text(
-                  'Calculating total workout,\n Please wait....',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Lottie.asset(ImagePath.jumpingJackAnimation, height: 250),
-                const SizedBox(height: 20),
-              ],
-            )
-          : Lottie.asset(ImagePath.successAnimation, height: 250);
-    });
   }
 }

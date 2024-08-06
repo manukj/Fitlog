@@ -93,16 +93,18 @@ class PoseDetectorService {
 
     final poses = await poseDetector.processImage(inputImage);
     checkTheStatusOfPoses(poses);
-    _iPoseDetectorService.onPoseDetected(totalJumpingJacks);
     final painter = PosePainter(
       poses,
       inputImage.metadata!.size,
       inputImage.metadata!.rotation,
       CameraLensDirection.back,
     );
-    _iPoseDetectorService.onPoseDetectionPain(CustomPaint(
-      painter: painter,
-    ));
+    _iPoseDetectorService.onPoseDetected(
+        totalJumpingJacks,
+        CustomPaint(
+          painter: painter,
+        ));
+
     _isBusy = false;
   }
 

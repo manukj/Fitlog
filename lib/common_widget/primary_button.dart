@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gainz/resource/theme/theme.dart';
+import 'package:get/get.dart';
 import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
 
 class PrimaryButton extends StatelessWidget {

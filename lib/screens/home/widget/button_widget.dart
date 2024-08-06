@@ -15,7 +15,7 @@ class WorkoutStatusButton extends GetView<PoseDetectorViewModel> {
         return _buildStartButton(controller.workoutStatus.value);
       }
 
-      return _buildPauseAndStopButton(controller.workoutStatus.value);
+      return _buildStopButton(controller.workoutStatus.value);
     });
   }
 
@@ -35,7 +35,7 @@ class WorkoutStatusButton extends GetView<PoseDetectorViewModel> {
     );
   }
 
-  Widget _buildPauseAndStopButton(WorkoutStatus status) {
+  Widget _buildStopButton(WorkoutStatus status) {
     return Builder(builder: (context) {
       return PrimaryButton(
         showShimmer: false,
