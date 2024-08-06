@@ -19,6 +19,9 @@ dependencies:
   camera: ^0.10.6
   animated_flip_counter: ^0.3.4
   audioplayers: ^6.0.0
+  firebase_core: ^2.0.0
+  firebase_auth: ^4.0.0
+  google_sign_in: ^6.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,9 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:gainz/common_widget/primary_button.dart';
+import 'package:gainz/resource/auth/auth_view_model.dart';
 import 'package:gainz/resource/constants/assets_path.dart';
+import 'package:gainz/resource/toast/toast_manager.dart';
 import 'package:gainz/screens/record/record.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -45,7 +47,13 @@ class SummaryWorkoutBottomSheet extends StatelessWidget {
                 ),
                 PrimaryButton(
                   onPressed: () {
-                    Get.to(const RecordPage());
+                    var authViewModel = Get.find<AuthViewModel>();
+                    if (authViewModel.isLoggedIn()) {
+                      Get.to(const RecordPage());
+                    } else {
+                      ToastManager.showSuccess("Please login first");
+                      authViewModel.signInWithGoogle();
+                    }
                   },
                   text: "Save Progress",
                 ),

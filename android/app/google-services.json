@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "233308871814",
+    "project_id": "gainz-interview",
+    "storage_bucket": "gainz-interview.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233308871814:android:4d9119e3559d7eef8c0507",
+        "android_client_info": {
+          "package_name": "com.example.gainz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "233308871814-vu6oceld8ef3om1iudjlu2kf7qgr85d6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAH1YzJVuDUOozUsJ8oOgPYDL54mbNViDQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "233308871814-vu6oceld8ef3om1iudjlu2kf7qgr85d6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "233308871814-d95c1bmajp0rgj2tb4opetfntttskfti.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gainz"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
