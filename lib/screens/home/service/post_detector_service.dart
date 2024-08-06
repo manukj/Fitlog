@@ -72,18 +72,25 @@ extension PoseLandmarkSerialization on PoseLandmark {
 }
 
 class PoseDetectorService {
+  final poseDetector = PoseDetector(options: PoseDetectorOptions());
   final IPoseDetectorService _iPoseDetectorService;
   var totalJumpingJacks = 0;
+  bool _canProcess = true;
+  bool _isBusy = false;
   var previousJumpingJackStatus = JumpingJackStatus.standing;
 
   PoseDetectorService(this._iPoseDetectorService);
 
   void detectPose(CameraImage image, CameraDescription camera,
       CameraController cameraController) async {
+    if (!_canProcess) return;
+    if (_isBusy) return;
+    _isBusy = true;
     var inputImage = await ImageUtil.inputImageFromCameraImage(
         image, camera, cameraController);
-    if (inputImage.metadata == null && inputImage.bytes == null) return;
-    final poseDetector = PoseDetector(options: PoseDetectorOptions());
+    if (inputImage == null ||
+        inputImage.metadata == null && inputImage.bytes == null) return;
+
     final poses = await poseDetector.processImage(inputImage);
     checkTheStatusOfPoses(poses);
     _iPoseDetectorService.onPoseDetected(totalJumpingJacks);
@@ -96,6 +103,7 @@ class PoseDetectorService {
     _iPoseDetectorService.onPoseDetectionPain(CustomPaint(
       painter: painter,
     ));
+    _isBusy = false;
   }
 
   void checkTheStatusOfPoses(List<Pose> poses) {
@@ -155,5 +163,10 @@ class PoseDetectorService {
   void resetCount() {
     totalJumpingJacks = 0;
     appLogger.debug('Total Jumping Jacks: reset $totalJumpingJacks');
+  }
+
+  void dispose() {
+    _canProcess = false;
+    poseDetector.close();
   }
 }

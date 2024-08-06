@@ -3,11 +3,8 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/widgets.dart';
-import 'package:gainz/resource/logger/logger.dart';
 import 'package:gainz/screens/home/service/i_pose_detector_service.dart';
 import 'package:gainz/screens/home/service/post_detector_service.dart';
-import 'package:gainz/screens/home/widget/calculating_workout_bottom_sheet.dart';
-import 'package:gainz/screens/record/record.dart';
 import 'package:get/get.dart';
 
 enum WorkoutStatus { init, starting, started }
@@ -55,14 +52,14 @@ class PoseDetectorViewModel extends GetxController
   }
 
   Future<void> finishWorkout() async {
-    controller!.stopImageStream();
-    calculatingTotalWorkout.value = true;
-    workoutStatus.value = WorkoutStatus.init;
-    Get.bottomSheet(
-      const CalculatingWorkoutBottomSheet(),
-      isDismissible: false,
-      enableDrag: false,
-    );
+    // controller!.stopImageStream();
+    // calculatingTotalWorkout.value = true;
+    // workoutStatus.value = WorkoutStatus.init;
+    // Get.bottomSheet(
+    //   const CalculatingWorkoutBottomSheet(),
+    //   isDismissible: false,
+    //   enableDrag: false,
+    // );
   }
 
   Future<void> _startCountDown() async {
@@ -88,6 +85,7 @@ class PoseDetectorViewModel extends GetxController
   @override
   void onClose() {
     controller?.dispose();
+    _poseDetectorService.dispose();
     super.onClose();
   }
 
@@ -96,15 +94,15 @@ class PoseDetectorViewModel extends GetxController
 
   @override
   void onPoseDetected(int totalCount) async {
-    totalJumpingJack.value = totalCount;
-    totalDetectedPoseCount++;
-    if (totalDetectedPoseCount == totalPoseCount) {
-      appLogger.log('All poses detected');
-      calculatingTotalWorkout.value = false;
-      Future.delayed(const Duration(seconds: 2), () {
-        Get.to(const RecordPage());
-      });
-    }
+    // totalJumpingJack.value = totalCount;
+    // totalDetectedPoseCount++;
+    // if (totalDetectedPoseCount == totalPoseCount) {
+    //   appLogger.log('All poses detected');
+    //   calculatingTotalWorkout.value = false;
+    //   Future.delayed(const Duration(seconds: 2), () {
+    //     Get.to(const RecordPage());
+    //   });
+    // }
   }
 
   @override
