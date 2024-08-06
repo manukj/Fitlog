@@ -18,7 +18,7 @@ class PoseDetectorService {
   var totalJumpingJacks = 0;
   bool _canProcess = true;
   bool _isBusy = false;
-  var previousJumpingJackStatus = JumpingJackStatus.standing;
+  JumpingJackStatus? previousJumpingJackStatus;
 
   PoseDetectorService(this._iPoseDetectorService);
 
@@ -97,7 +97,13 @@ class PoseDetectorService {
       currentJumpingJackStatus = JumpingJackStatus.jumpOut;
     } else if (ankleDistance < shoulderDistance * 1.2 && !handsAboveShoulders) {
       appLogger.debug('Jumping Jacks: Jump In');
-      currentJumpingJackStatus = JumpingJackStatus.jumpIn;
+      // The first status is detected as Jump In, that means the person is still at the starting position
+      if (previousJumpingJackStatus == null ||
+          previousJumpingJackStatus == JumpingJackStatus.standing) {
+        currentJumpingJackStatus = JumpingJackStatus.standing;
+      } else {
+        currentJumpingJackStatus = JumpingJackStatus.jumpIn;
+      }
     }
 
     appLogger.debug(
@@ -111,18 +117,14 @@ class PoseDetectorService {
     }
 
     if (currentJumpingJackStatus != null) {
-      if (currentJumpingJackStatus == JumpingJackStatus.jumpOut) {
-        _iPoseDetectorService.onJumpingUp();
-      } else if (currentJumpingJackStatus == JumpingJackStatus.jumpIn) {
-        _iPoseDetectorService.onJumpingDown();
-      }
+      _iPoseDetectorService.onPoseStatus(currentJumpingJackStatus);
       previousJumpingJackStatus = currentJumpingJackStatus;
     }
   }
 
   void resetCount() {
     totalJumpingJacks = 0;
-    previousJumpingJackStatus = JumpingJackStatus.standing;
+    previousJumpingJackStatus = null;
     _canProcess = true;
     _isBusy = false;
     appLogger.debug('Total Jumping Jacks: reset $totalJumpingJacks');

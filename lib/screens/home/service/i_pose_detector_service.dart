@@ -1,13 +1,12 @@
 import 'package:flutter/widgets.dart';
+import 'package:gainz/screens/home/service/post_detector_service.dart';
 
 abstract class IPoseDetectorService {
   void noPersonFound();
 
   void onPoseDetected(CustomPaint customPaint);
 
-  void onJumpingUp();
-
-  void onJumpingDown();
+  void onPoseStatus(JumpingJackStatus status);
 
   void onJumpingJackCompleted(int count);
 }

@@ -96,18 +96,18 @@ class PoseDetectorViewModel extends GetxController
   }
 
   @override
-  void noPersonFound() {
-    informationMessage.value = 'No person found';
-  }
-
-  @override
-  void onJumpingUp() {
-    informationMessage.value = 'Jumping up';
-  }
-
-  @override
-  void onJumpingDown() {
-    informationMessage.value = 'Jumping down';
+  void onPoseStatus(JumpingJackStatus status) {
+    switch (status) {
+      case JumpingJackStatus.standing:
+        informationMessage.value = 'Standing';
+        break;
+      case JumpingJackStatus.jumpIn:
+        informationMessage.value = 'Jumping in';
+        break;
+      case JumpingJackStatus.jumpOut:
+        informationMessage.value = 'Jumping out';
+        break;
+    }
   }
 
   @override
@@ -119,5 +119,10 @@ class PoseDetectorViewModel extends GetxController
   void onJumpingJackCompleted(int count) {
     totalJumpingJack.value = count;
     audioPlayerHelper.play();
+  }
+
+  @override
+  void noPersonFound() {
+    informationMessage.value = 'No person found';
   }
 }
