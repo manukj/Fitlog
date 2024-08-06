@@ -6,6 +6,8 @@ class AssetsPath {
       'assets/lottiefiles/jumping_jack_animation.json';
   static const String successAnimation =
       'assets/lottiefiles/success_animation.json';
+  static const String warningAnimation =
+      'assets/lottiefiles/warning_animation.json';
 
   static const String repCountAudio = 'audio/rep_count.wav';
 }

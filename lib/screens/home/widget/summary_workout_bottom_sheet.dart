@@ -74,7 +74,7 @@ class SummaryWorkoutBottomSheet extends StatelessWidget {
           ),
         ),
         Lottie.asset(
-          AssetsPath.jumpingJackAnimation,
+          AssetsPath.warningAnimation,
           height: 200,
         ),
         const SizedBox(height: 20),
