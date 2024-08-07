@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gainz/resource/constants/assets_path.dart';
+import 'package:gainz/resource/theme/theme.dart';
 import 'package:lottie/lottie.dart';
 
 class CommonLoader extends StatelessWidget {
@@ -8,22 +9,26 @@ class CommonLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Lottie.asset(
-          AssetsPath.jumpingJackAnimation,
-          height: 200,
-        ),
-        Text(
-          loadingMessage,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+    return Container(
+      color: AppThemedata.surface,
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Lottie.asset(
+            AssetsPath.jumpingJackAnimation,
+            height: 200,
           ),
-        ),
-      ],
+          Text(
+            loadingMessage,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

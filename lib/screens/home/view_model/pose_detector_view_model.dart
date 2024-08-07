@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gainz/resource/audio_player/audio_player_helper.dart';
+import 'package:gainz/resource/util/bottom_sheet_util.dart';
 import 'package:gainz/screens/home/service/i_pose_detector_service.dart';
 import 'package:gainz/screens/home/service/post_detector_service.dart';
 import 'package:gainz/screens/home/widget/summary_workout_bottom_sheet.dart';
@@ -37,7 +39,7 @@ class PoseDetectorViewModel extends GetxController
       final firstCamera = cameras.first;
       controller = CameraController(
         firstCamera,
-        ResolutionPreset.medium,
+        ResolutionPreset.high,
         enableAudio: false,
         imageFormatGroup: Platform.isAndroid
             ? ImageFormatGroup.nv21
@@ -56,10 +58,9 @@ class PoseDetectorViewModel extends GetxController
   Future<void> finishWorkout() async {
     controller!.stopImageStream();
     workoutStatus.value = WorkoutStatus.init;
-    Get.bottomSheet(
+    showAppBottomSheet(
       SummaryWorkoutBottomSheet(totalJumpingJack: totalJumpingJack.value),
       isDismissible: false,
-      enableDrag: true,
     );
     Future.delayed(const Duration(seconds: 1), () {
       customPaint.value = null;
