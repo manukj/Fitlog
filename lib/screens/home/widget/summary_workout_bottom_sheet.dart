@@ -67,7 +67,7 @@ class SummaryWorkoutBottomSheet extends StatelessWidget {
         ),
         Lottie.asset(
           AssetsPath.warningAnimation,
-          height: 200,
+          height: 300,
         ),
         const SizedBox(height: 20),
         PrimaryButton(

@@ -8,6 +8,7 @@ class AssetsPath {
       'assets/lottiefiles/success_animation.json';
   static const String warningAnimation =
       'assets/lottiefiles/warning_animation.json';
+  static const String emptyList = 'assets/lottiefiles/empty_list.json';
 
   static const String repCountAudio = 'audio/rep_count.wav';
 }

@@ -18,12 +18,12 @@ class CommonLoader extends StatelessWidget {
         children: [
           Lottie.asset(
             AssetsPath.jumpingJackAnimation,
-            height: 200,
+            height: 300,
           ),
           Text(
             loadingMessage,
             style: const TextStyle(
-              fontSize: 20,
+              fontSize: 29,
               fontWeight: FontWeight.bold,
             ),
           ),
