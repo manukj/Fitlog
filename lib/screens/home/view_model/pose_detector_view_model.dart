@@ -39,7 +39,7 @@ class PoseDetectorViewModel extends GetxController
       final firstCamera = cameras.first;
       controller = CameraController(
         firstCamera,
-        ResolutionPreset.high,
+        ResolutionPreset.low,
         enableAudio: false,
         imageFormatGroup: Platform.isAndroid
             ? ImageFormatGroup.nv21

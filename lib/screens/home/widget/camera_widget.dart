@@ -25,14 +25,11 @@ class CameraWidget extends GetView<PoseDetectorViewModel> {
               ),
               height: isInitState ? Get.height : Get.height / 2,
               width: Get.width,
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: CameraPreview(
-                  controller.controller!,
-                  child: Obx(() {
-                    return controller.customPaint.value ?? Container();
-                  }),
-                ),
+              child: CameraPreview(
+                controller.controller!,
+                child: Obx(() {
+                  return controller.customPaint.value ?? Container();
+                }),
               ),
             ),
           );
