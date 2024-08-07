@@ -5,6 +5,7 @@ import 'package:gainz/resource/auth/auth_view_model.dart';
 import 'package:gainz/resource/constants/assets_path.dart';
 import 'package:gainz/resource/toast/toast_manager.dart';
 import 'package:gainz/resource/util/bottom_sheet_util.dart';
+import 'package:gainz/screens/home/view_model/record_view_model.dart';
 import 'package:gainz/screens/home/widget/record_bottom_sheet/record_bottom_sheet.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -40,6 +41,7 @@ class SummaryWorkoutBottomSheet extends StatelessWidget {
                 onPressed: () {
                   var authViewModel = Get.find<AuthViewModel>();
                   if (authViewModel.isLoggedIn()) {
+                    Get.find<RecordViewModel>().saveRecord(totalJumpingJack.toInt());
                     showAppBottomSheet(
                       const RecordsBottomSheet(),
                     );
@@ -67,7 +69,7 @@ class SummaryWorkoutBottomSheet extends StatelessWidget {
         ),
         Lottie.asset(
           AssetsPath.warningAnimation,
-          height: 300,
+          height: 230,
         ),
         const SizedBox(height: 20),
         PrimaryButton(

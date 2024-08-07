@@ -29,8 +29,10 @@ class DbService {
     try {
       QuerySnapshot querySnapshot = await _firestore
           .collection('users')
-          .doc(userId)
+          .doc(userId)  
           .collection('reps')
+          .orderBy('date', descending: false)
+          .limit(14)
           .get();
       repsList = querySnapshot.docs
           .map((doc) => RepsRecord.fromMap(doc.data() as Map<String, dynamic>))

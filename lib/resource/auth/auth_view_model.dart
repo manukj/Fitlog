@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:gainz/resource/logger/logger.dart';
+import 'package:gainz/resource/toast/toast_manager.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -27,7 +27,7 @@ class AuthViewModel extends GetxController {
   }
 
   void _setUserDetails(User? user) {
-    if (user!= null) {
+    if (user != null) {
       userName.value = user.displayName ?? '';
       userEmail.value = user.email ?? '';
       userPhotoUrl.value = user.photoURL ?? '';
@@ -57,8 +57,7 @@ class AuthViewModel extends GetxController {
         userPhotoUrl.value = googleUser.photoUrl ?? '';
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
-      appLogger.error(e.toString());
+      ToastManager.showError("Login Failed");
     } finally {
       isLoading.value = false;
     }

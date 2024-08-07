@@ -3,6 +3,7 @@ import 'package:gainz/common_widget/common_loader.dart';
 import 'package:gainz/common_widget/primary_button.dart';
 import 'package:gainz/resource/constants/assets_path.dart';
 import 'package:gainz/screens/home/view_model/record_view_model.dart';
+import 'package:gainz/screens/home/widget/record_bottom_sheet/record_bar_chart.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
@@ -23,7 +24,25 @@ class RecordsBottomSheet extends GetView<RecordViewModel> {
   }
 
   Widget _buildRecordsList() {
-    return Placeholder();
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Text(
+          "Today's Records ${controller.getTodayRecord()}",
+          style: const TextStyle(
+            fontSize: 29,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          height: 330,
+          child: RepsBarChart(data: controller.records.value),
+        ),
+      ],
+    );
   }
 
   Widget _buildEmptyList() {
@@ -39,7 +58,7 @@ class RecordsBottomSheet extends GetView<RecordViewModel> {
         ),
         Lottie.asset(
           AssetsPath.emptyList,
-          height: 300,
+          height: 230,
         ),
         const SizedBox(height: 20),
         PrimaryButton(

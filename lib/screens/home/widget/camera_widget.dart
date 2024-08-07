@@ -17,14 +17,16 @@ class CameraWidget extends GetView<PoseDetectorViewModel> {
         Obx(() {
           var isInitState =
               controller.workoutStatus.value == WorkoutStatus.init;
+          var height = (isInitState ? Get.height : Get.height / 2) * 0.6;
+          var deviceRatio = Get.width / (height);
           return Align(
             alignment: Alignment.center,
-            child: AnimatedContainer(
+            child: AnimatedScale(
               duration: const Duration(
                 milliseconds: 1500,
               ),
-              height: isInitState ? Get.height : Get.height / 2,
-              width: Get.width,
+              scale: (controller.controller!.value.aspectRatio / deviceRatio) *
+                  0.5,
               child: CameraPreview(
                 controller.controller!,
                 child: Obx(() {
