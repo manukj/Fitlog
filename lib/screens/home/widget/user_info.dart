@@ -27,7 +27,16 @@ class UserInfo extends StatelessWidget {
                 filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    gradient: LinearGradient(
+                      colors: [
+                        const Color(0XFF1F6950).withOpacity(0.7),
+                        const Color(0XFF14161E).withOpacity(0.7),
+                        const Color(0XFF14161E).withOpacity(0.7),
+                        const Color(0XFF1F6950).withOpacity(0.7),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -51,14 +60,14 @@ class UserInfo extends StatelessWidget {
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: Colors.white,
                               ),
                             ),
                             const Text(
                               'Welcome back to Gainz',
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.black54,
+                                color: Colors.white60,
                               ),
                             ),
                           ],
