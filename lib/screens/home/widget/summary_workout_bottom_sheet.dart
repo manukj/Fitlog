@@ -38,17 +38,17 @@ class SummaryWorkoutBottomSheet extends StatelessWidget {
                 ),
               ),
               PrimaryButton(
-                onPressed: () {
+                onPressed: () async {
                   var authViewModel = Get.find<AuthViewModel>();
-                  if (authViewModel.isLoggedIn()) {
-                    Get.find<RecordViewModel>().saveRecord(totalJumpingJack.toInt());
-                    showAppBottomSheet(
-                      const RecordsBottomSheet(),
-                    );
-                  } else {
+                  if (!authViewModel.isLoggedIn()) {
                     ToastManager.showSuccess("Please login first");
-                    authViewModel.signInWithGoogle();
+                    await authViewModel.signInWithGoogle();
                   }
+                  Get.find<RecordViewModel>()
+                      .saveRecord(totalJumpingJack.toInt());
+                  showAppBottomSheet(
+                    const RecordsBottomSheet(),
+                  );
                 },
                 text: "Save Progress",
               ),
