@@ -1,4 +1,7 @@
-# App Name
+# JumpSync!
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/47d2cf46-e2c4-451d-96fe-91b6c55ee7c1" alt="logo">
+</p>
 
 ## Table of Contents
 
@@ -6,7 +9,6 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Configuration](#configuration)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
@@ -17,11 +19,11 @@ Welcome to JumpSync! This application helps you track jumping jacks, allowing yo
 
 ## Features
 
-- Record your self to detect the jumping jacks
-- Audio feedback for each successfull completetion 
-- record the workout
-- see the progress of last 15 days of workout 
-- Sync across multiple devices
+- Record yourself to detect the jumping jacks.
+- Receive audio feedback for each successful completion.
+- Record your workout.
+- See the progress of your last 15 days of workouts.
+- Sync across multiple devices.
 
 ## Installation
 
@@ -32,31 +34,29 @@ Welcome to JumpSync! This application helps you track jumping jacks, allowing yo
 ### Steps
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/app-name.git
+   git clone <project-github-link>
    ```
 2. Navigate to the project directory:
    ```bash
-   cd app-name
+   cd projec-name
    ```
 3. Install the dependencies:
    ```bash
    make all
    ```
 
-For mobile apps:
-1. Download the app from [App Store](#) or [Google Play Store](#).
-2. Follow the installation instructions on your device.
-
 ## Usage
-1. Allow Camera permission
-2. Click on Start workout, record yourseld doing  jumping jack from the app, once your done with the work out 
-3. Click on Stop Workout 
-4. your asked to save the workout, if so, then your asked to sign in with google to save record 
-5. login can be done even at inital page
-6. If user is already signed, his name and google profile pic is shown above, clicking on it will open the records of his workout 
+- Allow camera permission.
+- Click on Start Workout, and record yourself doing jumping jacks from the app. Once you're done with the workout,
+- Click on Stop Workout.
+- You are asked to save the workout. If you choose to save it, you will be asked to sign in with Google to save the record.
+- Login can also be done on the initial page.
+- If the user is already signed in, their name and Google profile picture are shown above. Clicking on it will open their workout records.
 
 For more detailed usage instructions, refer to the [User Guide](link-to-user-guide).
-
+![Group 1](https://github.com/user-attachments/assets/14b3aa82-80b8-46f4-b286-f0ed29fbb5b1)
+![Group 2](https://github.com/user-attachments/assets/49263100-231e-481c-bd09-576abc0e4bd4)
+[Jumping jack Video used for demo](https://www.youtube.com/watch?v=sRDmKd5G8m4)
 
 ## Contributing
 
