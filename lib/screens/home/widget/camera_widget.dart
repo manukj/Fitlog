@@ -15,6 +15,7 @@ class CameraWidget extends GetView<PoseDetectorViewModel> {
     return Stack(
       children: [
         Obx(() {
+          //calculating the aspect ratio according to the height settings
           var isInitState =
               controller.workoutStatus.value == WorkoutStatus.init;
           var height = (isInitState ? Get.height : Get.height / 2) * 0.6;
