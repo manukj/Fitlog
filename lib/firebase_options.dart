@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '233308871814',
     projectId: 'gainz-interview',
     storageBucket: 'gainz-interview.appspot.com',
+    androidClientId: '233308871814-nsq3qiqv4ehqmuej0k7ul9csjf4qcv5l.apps.googleusercontent.com',
     iosClientId: '233308871814-d95c1bmajp0rgj2tb4opetfntttskfti.apps.googleusercontent.com',
     iosBundleId: 'com.example.gainz',
   );

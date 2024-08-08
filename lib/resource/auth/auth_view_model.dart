@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gainz/resource/logger/logger.dart';
 import 'package:gainz/resource/toast/toast_manager.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -57,6 +58,7 @@ class AuthViewModel extends GetxController {
         userPhotoUrl.value = googleUser.photoUrl ?? '';
       }
     } catch (e) {
+      appLogger.error('Error while signing in with Google: $e');
       ToastManager.showError("Login Failed");
     } finally {
       isLoading.value = false;
