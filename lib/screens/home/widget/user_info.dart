@@ -70,7 +70,6 @@ class UserInfo extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 
   Row _buildUserinfo() {
@@ -111,7 +110,7 @@ class UserInfo extends StatelessWidget {
                     ),
                   ),
                   const Text(
-                    'Welcome back to Gainz',
+                    'Welcome back ',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white60,
