@@ -49,11 +49,17 @@ class PickWorkoutPage extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            workout.name,
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
+                          child: Hero(
+                            tag: workout.image + workout.name,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: Text(
+                                workout.name,
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                           ),
                         ),
                       ],

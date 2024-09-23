@@ -50,10 +50,16 @@ class UserInfo extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Text(
-                      workout.name,
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                    Hero(
+                      tag: workout.image + workout.name,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Text(
+                          workout.name,
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
                   ],
                 ),
