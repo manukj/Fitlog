@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:gainz/resource/firebase/model/reps_record.dart';
+import 'package:Vyayama/resource/firebase/model/reps_record.dart';
 import 'package:intl/intl.dart';
 
 class RepsBarChart extends StatelessWidget {

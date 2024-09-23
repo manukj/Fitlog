@@ -1,12 +1,12 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
-import 'package:gainz/common_widget/primary_button.dart';
-import 'package:gainz/resource/auth/auth_view_model.dart';
-import 'package:gainz/resource/constants/assets_path.dart';
-import 'package:gainz/resource/toast/toast_manager.dart';
-import 'package:gainz/resource/util/bottom_sheet_util.dart';
-import 'package:gainz/screens/home/view_model/record_view_model.dart';
-import 'package:gainz/screens/home/widget/record_bottom_sheet/record_bottom_sheet.dart';
+import 'package:Vyayama/common_widget/primary_button.dart';
+import 'package:Vyayama/resource/auth/auth_view_model.dart';
+import 'package:Vyayama/resource/constants/assets_path.dart';
+import 'package:Vyayama/resource/toast/toast_manager.dart';
+import 'package:Vyayama/resource/util/bottom_sheet_util.dart';
+import 'package:Vyayama/screens/home/view_model/record_view_model.dart';
+import 'package:Vyayama/screens/home/widget/record_bottom_sheet/record_bottom_sheet.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 

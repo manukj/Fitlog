@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:gainz/resource/auth/auth_view_model.dart';
-import 'package:gainz/resource/util/bottom_sheet_util.dart';
-import 'package:gainz/screens/home/view_model/record_view_model.dart';
-import 'package:gainz/screens/home/widget/record_bottom_sheet/record_bottom_sheet.dart';
+import 'package:Vyayama/resource/auth/auth_view_model.dart';
+import 'package:Vyayama/resource/util/bottom_sheet_util.dart';
+import 'package:Vyayama/screens/home/view_model/record_view_model.dart';
+import 'package:Vyayama/screens/home/widget/record_bottom_sheet/record_bottom_sheet.dart';
 import 'package:get/get.dart';
 
 class UserInfo extends StatelessWidget {

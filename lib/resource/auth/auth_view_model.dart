@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:gainz/resource/logger/logger.dart';
-import 'package:gainz/resource/toast/toast_manager.dart';
+import 'package:Vyayama/resource/logger/logger.dart';
+import 'package:Vyayama/resource/toast/toast_manager.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 

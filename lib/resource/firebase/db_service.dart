@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gainz/resource/auth/auth_view_model.dart';
-import 'package:gainz/resource/firebase/model/reps_record.dart';
-import 'package:gainz/resource/util/date_util.dart';
+import 'package:Vyayama/resource/auth/auth_view_model.dart';
+import 'package:Vyayama/resource/firebase/model/reps_record.dart';
+import 'package:Vyayama/resource/util/date_util.dart';
 import 'package:get/get.dart';
 
 class DbService {

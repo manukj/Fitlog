@@ -4,11 +4,11 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:gainz/resource/audio_player/audio_player_helper.dart';
-import 'package:gainz/resource/util/bottom_sheet_util.dart';
-import 'package:gainz/screens/home/service/i_pose_detector_service.dart';
-import 'package:gainz/screens/home/service/post_detector_service.dart';
-import 'package:gainz/screens/home/widget/summary_workout_bottom_sheet.dart';
+import 'package:Vyayama/resource/audio_player/audio_player_helper.dart';
+import 'package:Vyayama/resource/util/bottom_sheet_util.dart';
+import 'package:Vyayama/screens/home/service/i_pose_detector_service.dart';
+import 'package:Vyayama/screens/home/service/post_detector_service.dart';
+import 'package:Vyayama/screens/home/widget/summary_workout_bottom_sheet.dart';
 import 'package:get/get.dart';
 
 enum WorkoutStatus { init, starting, started }

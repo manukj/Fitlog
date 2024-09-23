@@ -1,9 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:gainz/resource/logger/logger.dart';
-import 'package:gainz/resource/painter/pose_painter.dart';
-import 'package:gainz/resource/util/image_util.dart';
-import 'package:gainz/screens/home/service/i_pose_detector_service.dart';
+import 'package:Vyayama/resource/logger/logger.dart';
+import 'package:Vyayama/resource/painter/pose_painter.dart';
+import 'package:Vyayama/resource/util/image_util.dart';
+import 'package:Vyayama/screens/home/service/i_pose_detector_service.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 enum JumpingJackStatus {

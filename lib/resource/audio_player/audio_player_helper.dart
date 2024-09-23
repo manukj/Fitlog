@@ -1,5 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:gainz/resource/constants/assets_path.dart';
+import 'package:Vyayama/resource/constants/assets_path.dart';
 
 class AudioPlayerHelper {
   AudioPlayer _player = AudioPlayer();

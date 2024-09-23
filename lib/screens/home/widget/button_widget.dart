@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gainz/common_widget/primary_button.dart';
-import 'package:gainz/resource/theme/theme.dart';
-import 'package:gainz/screens/home/view_model/pose_detector_view_model.dart';
+import 'package:Vyayama/common_widget/primary_button.dart';
+import 'package:Vyayama/resource/theme/theme.dart';
+import 'package:Vyayama/screens/home/view_model/pose_detector_view_model.dart';
 import 'package:get/get.dart';
 
 class WorkoutStatusButton extends GetView<PoseDetectorViewModel> {

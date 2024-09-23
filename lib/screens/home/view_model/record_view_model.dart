@@ -1,5 +1,5 @@
-import 'package:gainz/resource/firebase/db_service.dart';
-import 'package:gainz/resource/firebase/model/reps_record.dart';
+import 'package:Vyayama/resource/firebase/db_service.dart';
+import 'package:Vyayama/resource/firebase/model/reps_record.dart';
 import 'package:get/get.dart';
 
 class RecordViewModel extends GetxController {

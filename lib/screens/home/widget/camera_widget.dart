@@ -1,9 +1,9 @@
+import 'package:Vyayama/resource/constants/assets_path.dart';
+import 'package:Vyayama/screens/home/view_model/pose_detector_view_model.dart';
+import 'package:Vyayama/screens/home/widget/button_widget.dart';
+import 'package:Vyayama/screens/home/widget/count_down_and_timer.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:gainz/resource/constants/assets_path.dart';
-import 'package:gainz/screens/home/view_model/pose_detector_view_model.dart';
-import 'package:gainz/screens/home/widget/button_widget.dart';
-import 'package:gainz/screens/home/widget/count_down_and_timer.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 

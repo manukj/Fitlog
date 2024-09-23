@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gainz/resource/constants/assets_path.dart';
-import 'package:gainz/resource/theme/theme.dart';
+import 'package:Vyayama/resource/constants/assets_path.dart';
+import 'package:Vyayama/resource/theme/theme.dart';
 import 'package:lottie/lottie.dart';
 
 class CommonLoader extends StatelessWidget {

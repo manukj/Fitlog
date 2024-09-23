@@ -1,8 +1,8 @@
+import 'package:Vyayama/resource/logger/logger.dart';
+import 'package:Vyayama/resource/theme/theme.dart';
+import 'package:Vyayama/screens/pick_workout_page/pick_workout_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:gainz/resource/logger/logger.dart';
-import 'package:gainz/resource/theme/theme.dart';
-import 'package:gainz/screens/home/home_page.dart';
 import 'package:get/route_manager.dart';
 import 'package:toastification/toastification.dart';
 
@@ -22,7 +22,7 @@ class App extends StatelessWidget {
               appLogger.debug('Routing to: ${routing?.current}');
             }
           },
-          home: HomePage(),
+          home: const PickWorkoutPage(),
         ),
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:gainz/screens/home/service/post_detector_service.dart';
+import 'package:Vyayama/screens/home/service/post_detector_service.dart';
 
 abstract class IPoseDetectorService {
   void noPersonFound();
