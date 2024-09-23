@@ -1,24 +1,28 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:Vyayama/resource/audio_player/audio_player_helper.dart';
+import 'package:Vyayama/resource/logger/logger.dart';
+import 'package:Vyayama/resource/util/bottom_sheet_util.dart';
+import 'package:Vyayama/screens/home/model/workout_list.dart';
+import 'package:Vyayama/screens/home/service/interface/i_pose_detector_call_back.dart';
+import 'package:Vyayama/screens/home/service/interface/i_pose_detector_service.dart';
+import 'package:Vyayama/screens/home/service/post_detector_service.dart';
+import 'package:Vyayama/screens/home/widget/summary_workout_bottom_sheet.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:Vyayama/resource/audio_player/audio_player_helper.dart';
-import 'package:Vyayama/resource/util/bottom_sheet_util.dart';
-import 'package:Vyayama/screens/home/service/i_pose_detector_service.dart';
-import 'package:Vyayama/screens/home/service/post_detector_service.dart';
-import 'package:Vyayama/screens/home/widget/summary_workout_bottom_sheet.dart';
 import 'package:get/get.dart';
 
 enum WorkoutStatus { init, starting, started }
 
 class PoseDetectorViewModel extends GetxController
-    implements IPoseDetectorService {
+    implements IPoseDetectorCallback {
   final AudioPlayerHelper audioPlayerHelper = Get.put(AudioPlayerHelper());
 
-  late final PoseDetectorService _poseDetectorService;
+  late WorkoutType workout;
   late List<CameraDescription> cameras;
+  IPoseDetectorService? _poseDetectorService;
   CameraController? controller;
   Future<void>? initializeControllerFuture;
   Rx<CustomPaint?> customPaint = Rx<CustomPaint?>(null);
@@ -27,11 +31,9 @@ class PoseDetectorViewModel extends GetxController
   Rx<WorkoutStatus> workoutStatus = Rx<WorkoutStatus>(WorkoutStatus.init);
   Rx<String> informationMessage = Rx<String>('');
 
-  PoseDetectorViewModel() {
-    _poseDetectorService = PoseDetectorService(this);
-  }
-
-  init() async {
+  init(WorkoutType workout) async {
+    this.workout = workout;
+    initPoseDetector();
     cameras = await availableCameras();
     if (cameras.isEmpty) {
       throw Exception('No camera found');
@@ -49,10 +51,44 @@ class PoseDetectorViewModel extends GetxController
     }
   }
 
+  void initPoseDetector() {
+    switch (workout.type) {
+      case WorkouTypeEnums.JumpingJacks:
+        _poseDetectorService = JumpingJackDetectorService(this);
+        break;
+      case WorkouTypeEnums.BarbellRow:
+        //TODO: Implement BarbellRow
+        break;
+      case WorkouTypeEnums.BenchPress:
+        // TODO: Implement BenchPress
+        break;
+      case WorkouTypeEnums.ShoulderPress:
+        // TODO: Implement ShoulderPress
+        break;
+      case WorkouTypeEnums.Deadlift:
+        // TODO: Implement Deadlift
+        break;
+      case WorkouTypeEnums.Squat:
+        // TODO: Implement Squat
+        break;
+    }
+  }
+
   Future<void> startWorkout() async {
+    if (_poseDetectorService == null) {
+      appLogger.error('Pose Detector Service is not initialized');
+      return;
+    }
     workoutStatus.value = WorkoutStatus.starting;
     await _startCountDown();
-    _detectPoses();
+    _poseDetectorService!.resetCount();
+    controller!.startImageStream((image) {
+      _poseDetectorService!.detectPose(
+        image,
+        controller!.description,
+        controller!,
+      );
+    });
   }
 
   Future<void> finishWorkout() async {
@@ -77,36 +113,34 @@ class PoseDetectorViewModel extends GetxController
     });
   }
 
-  void _detectPoses() {
-    _poseDetectorService.resetCount();
-    controller!.startImageStream((image) {
-      _poseDetectorService.detectPose(
-        image,
-        controller!.description,
-        controller!,
-      );
-    });
-  }
-
   @override
   void onClose() {
     controller?.dispose();
-    _poseDetectorService.dispose();
+    _poseDetectorService?.dispose();
     audioPlayerHelper.dispose();
     super.onClose();
   }
 
   @override
-  void onPoseStatus(JumpingJackStatus status) {
+  void onPoseStatusChanged(WorkoutProgressStatus status) {
     switch (status) {
-      case JumpingJackStatus.standing:
+      case WorkoutProgressStatus.standing:
         informationMessage.value = 'Standing';
         break;
-      case JumpingJackStatus.jumpIn:
+      case WorkoutProgressStatus.jumpIn:
         informationMessage.value = 'Jumping in';
         break;
-      case JumpingJackStatus.jumpOut:
+      case WorkoutProgressStatus.jumpOut:
         informationMessage.value = 'Jumping out';
+        break;
+      case WorkoutProgressStatus.init:
+        // TODO: Handle this case.
+        break;
+      case WorkoutProgressStatus.completed:
+        // TODO: Handle this case.
+        break;
+      case WorkoutProgressStatus.inProgress:
+        // TODO: Handle this case.
         break;
     }
   }
@@ -117,7 +151,7 @@ class PoseDetectorViewModel extends GetxController
   }
 
   @override
-  void onJumpingJackCompleted(int count) {
+  void onWorkoutCompleted(int count) {
     totalJumpingJack.value = count;
     audioPlayerHelper.play();
   }

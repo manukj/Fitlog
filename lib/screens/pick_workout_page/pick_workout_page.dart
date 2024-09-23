@@ -1,3 +1,6 @@
+import 'package:Vyayama/common_widget/common_card.dart';
+import 'package:Vyayama/common_widget/common_scaffold.dart';
+import 'package:Vyayama/resource/theme/theme.dart';
 import 'package:Vyayama/screens/home/home_page.dart';
 import 'package:Vyayama/screens/home/model/workout_list.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +11,17 @@ class PickWorkoutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CommonScaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppThemedata.primary,
+        onPressed: () {
+          // Get.to(() => const HomePage());
+        },
+        child: const Icon(
+          Icons.list,
+          color: AppThemedata.surface,
+        ),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -33,8 +46,7 @@ class PickWorkoutPage extends StatelessWidget {
                   onTap: () {
                     Get.to(() => HomePage(workout: workout));
                   },
-                  child: Card(
-                    elevation: 4.0,
+                  child: CommonCard(
                     child: Column(
                       children: [
                         Expanded(

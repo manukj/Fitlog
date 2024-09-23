@@ -14,6 +14,7 @@ class AssetsPath {
   static const String shoulderPress = 'assets/images/shoulder_press.png';
   static const String deadlift = 'assets/images/deadlift.png';
   static const String squat = 'assets/images/squat.png';
+  static const String jumpingJack = 'assets/images/jumping_jack.png';
 
   static const String repCountAudio = 'audio/rep_count.wav';
   static const String loading = "assets/lottiefiles/loading.json";

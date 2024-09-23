@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UserInfo extends StatelessWidget {
-  final Workout workout;
+  final WorkoutType workout;
   final AuthViewModel controller = Get.find();
   UserInfo({super.key, required this.workout});
 

@@ -9,13 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
-  final Workout workout;
+  final WorkoutType workout;
   final PoseDetectorViewModel poseViewModel = Get.put(PoseDetectorViewModel());
 
   HomePage({super.key, required this.workout});
 
   Future<void> _initializeCamera() async {
-    await poseViewModel.init();
+    await poseViewModel.init(workout);
     return poseViewModel.initializeControllerFuture;
   }
 

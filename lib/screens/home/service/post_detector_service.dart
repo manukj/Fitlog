@@ -1,57 +1,33 @@
-import 'package:camera/camera.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:Vyayama/resource/logger/logger.dart';
 import 'package:Vyayama/resource/painter/pose_painter.dart';
 import 'package:Vyayama/resource/util/image_util.dart';
-import 'package:Vyayama/screens/home/service/i_pose_detector_service.dart';
+import 'package:Vyayama/screens/home/service/base_pose_detector_service.dart';
+import 'package:Vyayama/screens/home/service/interface/i_pose_detector_call_back.dart';
+import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
-enum JumpingJackStatus {
+enum WorkoutProgressStatus {
   standing,
-  jumpOut, // when legs are spread and hands are above
-  jumpIn, // when you bring your legs together and lowering the arm
+  jumpOut,
+  jumpIn,
+  init,
+  inProgress,
+  completed,
 }
 
-class PoseDetectorService {
-  final poseDetector = PoseDetector(options: PoseDetectorOptions());
-  final IPoseDetectorService _iPoseDetectorService;
-  var totalJumpingJacks = 0;
-  bool _canProcess = true;
-  bool _isBusy = false;
-  JumpingJackStatus? previousJumpingJackStatus;
+class JumpingJackDetectorService extends BasePoseDetectorService {
+  final IPoseDetectorCallback _callback;
+  WorkoutProgressStatus? _previousProgressStatus = WorkoutProgressStatus.init;
 
-  PoseDetectorService(this._iPoseDetectorService);
+  JumpingJackDetectorService(this._callback) : super(_callback);
 
-  void detectPose(CameraImage image, CameraDescription camera,
-      CameraController cameraController) async {
-    if (!_canProcess) return;
-    if (_isBusy) return;
-    _isBusy = true;
-    var inputImage = await ImageUtil.inputImageFromCameraImage(
-        image, camera, cameraController);
-    if (inputImage == null ||
-        inputImage.metadata == null && inputImage.bytes == null) return;
-
-    final poses = await poseDetector.processImage(inputImage);
-    checkTheStatusOfPoses(poses);
-    final painter = PosePainter(
-      poses,
-      inputImage.metadata!.size,
-      inputImage.metadata!.rotation,
-      CameraLensDirection.back,
-    );
-    _iPoseDetectorService.onPoseDetected(CustomPaint(
-      painter: painter,
-    ));
-
-    _isBusy = false;
-  }
-
+  @override
   void checkTheStatusOfPoses(List<Pose> poses) {
-    JumpingJackStatus? currentJumpingJackStatus;
+    WorkoutProgressStatus? currentJumpingJackStatus;
     if (poses.isEmpty) {
       appLogger.debug('No Person Found');
-      return _iPoseDetectorService.noPersonFound();
+      return _callback.noPersonFound();
     }
 
     final Pose pose = poses.first;
@@ -94,40 +70,151 @@ class PoseDetectorService {
 
     if (ankleDistance > hipDistance * 1.5 && handsAboveShoulders) {
       appLogger.debug('Jumping Jacks: Jump Out');
-      currentJumpingJackStatus = JumpingJackStatus.jumpOut;
+      currentJumpingJackStatus = WorkoutProgressStatus.jumpOut;
+    } else if (ankleDistance < shoulderDistance * 1.2 && !handsAboveShoulders) {
+      appLogger.debug('Jumping Jacks: Jump In');
+      // The first status is detected as Jump In, that means the person is still at the starting position
+      if (_previousProgressStatus == null ||
+          _previousProgressStatus == WorkoutProgressStatus.standing) {
+        currentJumpingJackStatus = WorkoutProgressStatus.standing;
+      } else {
+        currentJumpingJackStatus = WorkoutProgressStatus.jumpIn;
+      }
+    }
+
+    appLogger.debug(
+        'Jumping Jacks: previous $_previousProgressStatus current $currentJumpingJackStatus');
+
+    if (_previousProgressStatus == WorkoutProgressStatus.jumpOut &&
+        currentJumpingJackStatus == WorkoutProgressStatus.jumpIn) {
+      totalReps++;
+      _callback.onWorkoutCompleted(totalReps);
+      appLogger.debug('Total Jumping Jacks: $totalReps');
+    }
+
+    if (currentJumpingJackStatus != null) {
+      _callback.onPoseStatusChanged(currentJumpingJackStatus);
+      _previousProgressStatus = currentJumpingJackStatus;
+    }
+  }
+}
+
+class PoseDetectorService {
+  final poseDetector = PoseDetector(options: PoseDetectorOptions());
+  final IPoseDetectorCallback _callback;
+  var totalReps = 0;
+  bool _canProcess = true;
+  bool _isBusy = false;
+  WorkoutProgressStatus? previousJumpingJackStatus;
+
+  PoseDetectorService(this._callback);
+
+  void detectPose(CameraImage image, CameraDescription camera,
+      CameraController cameraController) async {
+    if (!_canProcess) return;
+    if (_isBusy) return;
+    _isBusy = true;
+    var inputImage = await ImageUtil.inputImageFromCameraImage(
+        image, camera, cameraController);
+    if (inputImage == null ||
+        inputImage.metadata == null && inputImage.bytes == null) return;
+
+    final poses = await poseDetector.processImage(inputImage);
+    checkTheStatusOfPoses(poses);
+    final painter = PosePainter(
+      poses,
+      inputImage.metadata!.size,
+      inputImage.metadata!.rotation,
+      CameraLensDirection.back,
+    );
+    _callback.onPoseDetected(CustomPaint(
+      painter: painter,
+    ));
+
+    _isBusy = false;
+  }
+
+  void checkTheStatusOfPoses(List<Pose> poses) {
+    WorkoutProgressStatus? currentJumpingJackStatus;
+    if (poses.isEmpty) {
+      appLogger.debug('No Person Found');
+      return _callback.noPersonFound();
+    }
+
+    final Pose pose = poses.first;
+
+    final PoseLandmark? leftShoulder =
+        pose.landmarks[PoseLandmarkType.leftShoulder];
+    final PoseLandmark? rightShoulder =
+        pose.landmarks[PoseLandmarkType.rightShoulder];
+    final PoseLandmark? leftHip = pose.landmarks[PoseLandmarkType.leftHip];
+    final PoseLandmark? rightHip = pose.landmarks[PoseLandmarkType.rightHip];
+    final PoseLandmark? leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle];
+    final PoseLandmark? rightAnkle =
+        pose.landmarks[PoseLandmarkType.rightAnkle];
+    final PoseLandmark? leftWrist = pose.landmarks[PoseLandmarkType.leftWrist];
+    final PoseLandmark? rightWrist =
+        pose.landmarks[PoseLandmarkType.rightWrist];
+
+    if (leftShoulder == null ||
+        rightShoulder == null ||
+        leftHip == null ||
+        rightHip == null ||
+        leftAnkle == null ||
+        rightAnkle == null ||
+        leftWrist == null ||
+        rightWrist == null) {
+      appLogger.debug('One or more landmarks are missing');
+      return;
+    }
+
+    final double shoulderDistance = (leftShoulder.x - rightShoulder.x).abs();
+    final double hipDistance = (leftHip.x - rightHip.x).abs();
+    final double ankleDistance = (leftAnkle.x - rightAnkle.x).abs();
+    final bool handsAboveShoulders =
+        leftWrist.y < leftShoulder.y && rightWrist.y < rightShoulder.y;
+
+    appLogger.debug('Hands Above Shoulders: $handsAboveShoulders');
+    appLogger.debug('Shoulder Distance: $shoulderDistance');
+    appLogger.debug('Hip Distance: $hipDistance');
+    appLogger.debug('Ankle Distance: $ankleDistance');
+
+    if (ankleDistance > hipDistance * 1.5 && handsAboveShoulders) {
+      appLogger.debug('Jumping Jacks: Jump Out');
+      currentJumpingJackStatus = WorkoutProgressStatus.jumpOut;
     } else if (ankleDistance < shoulderDistance * 1.2 && !handsAboveShoulders) {
       appLogger.debug('Jumping Jacks: Jump In');
       // The first status is detected as Jump In, that means the person is still at the starting position
       if (previousJumpingJackStatus == null ||
-          previousJumpingJackStatus == JumpingJackStatus.standing) {
-        currentJumpingJackStatus = JumpingJackStatus.standing;
+          previousJumpingJackStatus == WorkoutProgressStatus.standing) {
+        currentJumpingJackStatus = WorkoutProgressStatus.standing;
       } else {
-        currentJumpingJackStatus = JumpingJackStatus.jumpIn;
+        currentJumpingJackStatus = WorkoutProgressStatus.jumpIn;
       }
     }
 
     appLogger.debug(
         'Jumping Jacks: previous $previousJumpingJackStatus current $currentJumpingJackStatus');
 
-    if (previousJumpingJackStatus == JumpingJackStatus.jumpOut &&
-        currentJumpingJackStatus == JumpingJackStatus.jumpIn) {
-      totalJumpingJacks++;
-      _iPoseDetectorService.onJumpingJackCompleted(totalJumpingJacks);
-      appLogger.debug('Total Jumping Jacks: $totalJumpingJacks');
+    if (previousJumpingJackStatus == WorkoutProgressStatus.jumpOut &&
+        currentJumpingJackStatus == WorkoutProgressStatus.jumpIn) {
+      totalReps++;
+      _callback.onWorkoutCompleted(totalReps);
+      appLogger.debug('Total Jumping Jacks: $totalReps');
     }
 
     if (currentJumpingJackStatus != null) {
-      _iPoseDetectorService.onPoseStatus(currentJumpingJackStatus);
+      _callback.onPoseStatusChanged(currentJumpingJackStatus);
       previousJumpingJackStatus = currentJumpingJackStatus;
     }
   }
 
   void resetCount() {
-    totalJumpingJacks = 0;
+    totalReps = 0;
     previousJumpingJackStatus = null;
     _canProcess = true;
     _isBusy = false;
-    appLogger.debug('Total Jumping Jacks: reset $totalJumpingJacks');
+    appLogger.debug('Total Jumping Jacks: reset $totalReps');
   }
 
   void dispose() {
