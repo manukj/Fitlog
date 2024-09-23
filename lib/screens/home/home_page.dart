@@ -28,30 +28,8 @@ class HomePage extends StatelessWidget {
           return Stack(
             children: [
               _buildCameraWidget(snapshot),
-              Column(
-                children: [
-                  UserInfo(),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Hero(
-                        tag: workout.image,
-                        child: Image.asset(
-                          workout.image,
-                          height: 50,
-                          width: 50,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        workout.name,
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ],
+              UserInfo(
+                workout: workout,
               ),
             ],
           );

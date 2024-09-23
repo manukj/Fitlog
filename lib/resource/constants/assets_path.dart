@@ -16,4 +16,5 @@ class AssetsPath {
   static const String squat = 'assets/images/squat.png';
 
   static const String repCountAudio = 'audio/rep_count.wav';
+  static const String loading = "assets/lottiefiles/loading.json";
 }

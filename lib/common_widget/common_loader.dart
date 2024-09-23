@@ -17,7 +17,7 @@ class CommonLoader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Lottie.asset(
-            AssetsPath.jumpingJackAnimation,
+            AssetsPath.loading,
             height: 300,
           ),
           Text(

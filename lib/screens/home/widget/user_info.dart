@@ -1,15 +1,17 @@
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
 import 'package:Vyayama/resource/auth/auth_view_model.dart';
 import 'package:Vyayama/resource/util/bottom_sheet_util.dart';
+import 'package:Vyayama/screens/home/model/workout_list.dart';
 import 'package:Vyayama/screens/home/view_model/record_view_model.dart';
 import 'package:Vyayama/screens/home/widget/record_bottom_sheet/record_bottom_sheet.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UserInfo extends StatelessWidget {
+  final Workout workout;
   final AuthViewModel controller = Get.find();
-  UserInfo({super.key});
+  UserInfo({super.key, required this.workout});
 
   @override
   Widget build(BuildContext context) {
@@ -33,39 +35,64 @@ class UserInfo extends StatelessWidget {
                 end: Alignment.centerRight,
               ),
             ),
-            child: Obx(() {
-              if (controller.isLoading.value) {
-                return const Row(
+            child: Column(
+              children: [
+                const SizedBox(height: 15),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Center(child: CircularProgressIndicator()),
-                    SizedBox(width: 20),
-                    Text(
-                      "Please Wait...",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
+                    Hero(
+                      tag: workout.image,
+                      child: Image.asset(
+                        workout.image,
+                        height: 50,
+                        width: 50,
                       ),
-                      textAlign: TextAlign.center,
-                    )
-                  ],
-                );
-              } else if (controller.isLoggedIn()) {
-                return _buildUserinfo();
-              } else {
-                return GestureDetector(
-                  onTap: () => controller.signInWithGoogle(),
-                  child: const Text(
-                    "Login",
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                );
-              }
-            }),
+                    const SizedBox(width: 10),
+                    Text(
+                      workout.name,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Obx(() {
+                  if (controller.isLoading.value) {
+                    return const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(child: CircularProgressIndicator()),
+                        SizedBox(width: 20),
+                        Text(
+                          "Please Wait...",
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    );
+                  } else if (controller.isLoggedIn()) {
+                    return _buildUserinfo();
+                  } else {
+                    return Container();
+                    return GestureDetector(
+                      onTap: () => controller.signInWithGoogle(),
+                      child: const Text(
+                        "Login",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  }
+                }),
+              ],
+            ),
           ),
         ),
       ),
