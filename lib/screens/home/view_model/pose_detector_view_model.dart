@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:Vyayama/resource/audio_player/audio_player_helper.dart';
 import 'package:Vyayama/resource/logger/logger.dart';
+import 'package:Vyayama/resource/toast/toast_manager.dart';
 import 'package:Vyayama/resource/util/bottom_sheet_util.dart';
 import 'package:Vyayama/screens/home/model/workout_list.dart';
 import 'package:Vyayama/screens/home/service/interface/i_pose_detector_call_back.dart';
@@ -77,6 +78,7 @@ class PoseDetectorViewModel extends GetxController
   Future<void> startWorkout() async {
     if (_poseDetectorService == null) {
       appLogger.error('Pose Detector Service is not initialized');
+      ToastManager.showError('Something went wrong, please try different workout');
       return;
     }
     workoutStatus.value = WorkoutStatus.starting;
