@@ -1,4 +1,5 @@
 import 'package:Vyayama/common_widget/primary_button.dart';
+import 'package:Vyayama/resource/util/bottom_sheet_util.dart';
 import 'package:Vyayama/screens/home/home_page.dart';
 import 'package:Vyayama/screens/home/model/workout_list.dart';
 import 'package:flutter/cupertino.dart';
@@ -69,7 +70,11 @@ class _PickWorkoutSpecsBottomSheetState
           const SizedBox(height: 20),
           PrimaryButton(
             onPressed: () {
-              Get.to(() => HomePage(workout: widget.workout));
+              closeBottomSheet();
+              var workout = widget.workout;
+              workout.setReps(selectedReps);
+              workout.setWeight(selectedWeight);
+              Get.to(() => HomePage(workout: workout));
             },
             text: 'Proceed',
           ),

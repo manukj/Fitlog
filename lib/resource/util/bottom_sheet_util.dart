@@ -1,6 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:Vyayama/resource/theme/theme.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+void closeBottomSheet() {
+  while (Get.isBottomSheetOpen ?? false) {
+    Get.back();
+  }
+}
 
 Future<void> showAppBottomSheet(Widget newBottomSheetContent,
     {bool isDismissible = true}) {
@@ -10,7 +16,7 @@ Future<void> showAppBottomSheet(Widget newBottomSheetContent,
   }
 
   // Show the new bottom sheet
- return  Get.bottomSheet(
+  return Get.bottomSheet(
     Container(
       width: Get.width,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),

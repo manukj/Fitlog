@@ -1,14 +1,11 @@
-import 'package:Vyayama/resource/constants/assets_path.dart';
-import 'package:Vyayama/resource/logger/logger.dart';
-import 'package:Vyayama/resource/theme/theme.dart';
 import 'package:Vyayama/screens/home/view_model/workout_detector_view_model.dart';
 import 'package:Vyayama/screens/home/widget/button_widget.dart';
 import 'package:Vyayama/screens/home/widget/count_down_and_timer.dart';
-import 'package:Vyayama/screens/home/workout_detector/base_workout_detector.dart';
+import 'package:Vyayama/screens/home/widget/count_down_animation.dart';
+import 'package:Vyayama/screens/home/widget/workout_status_indicator.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 
 class CameraWidget extends GetView<WorkoutDetectorViewModel> {
   const CameraWidget({super.key});
@@ -54,72 +51,9 @@ class CameraWidget extends GetView<WorkoutDetectorViewModel> {
             ],
           ),
         ),
-        _buildCountDownAnimation(),
-        _buildInformationMessage(),
+        const CountDownAnimation(),
+        const WorkoutStatusIndicator(),
       ],
-    );
-  }
-
-  Widget _buildInformationMessage() {
-    return SizedBox(
-      width: Get.width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(
-            height: 100,
-          ),
-          Obx(() {
-            var progress = controller.workoutProgressStatus.value ==
-                    WorkoutProgressStatus.middlePose
-                ? 1.0
-                : 0.0;
-            appLogger.debug('progress: $progress');
-            return Column(
-              children: [
-                AnimatedContainer(
-                  alignment: Alignment.center,
-                  duration: const Duration(milliseconds: 200),
-                  width: progress == 0.0 ? 10 : 300,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: AppThemedata.primary,
-                    border:
-                        Border.all(color: Colors.white), // Added border color
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          }),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCountDownAnimation() {
-    return Obx(
-      () {
-        if (controller.showCountDown.value) {
-          return Center(
-            child: Lottie.asset(
-              AssetsPath.countDownAnimation,
-            ),
-          );
-        } else {
-          return Container();
-        }
-      },
     );
   }
 }
