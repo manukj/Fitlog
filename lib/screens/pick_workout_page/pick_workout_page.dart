@@ -1,8 +1,9 @@
 import 'package:Vyayama/common_widget/common_card.dart';
 import 'package:Vyayama/common_widget/common_scaffold.dart';
 import 'package:Vyayama/resource/theme/theme.dart';
-import 'package:Vyayama/screens/home/home_page.dart';
+import 'package:Vyayama/resource/util/bottom_sheet_util.dart';
 import 'package:Vyayama/screens/home/model/workout_list.dart';
+import 'package:Vyayama/screens/pick_workout_page/widget/pick_workout_specs_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -59,34 +60,30 @@ class PickWorkoutPage extends StatelessWidget {
                     final workout = WorkoutList.workouts[index];
                     return GestureDetector(
                       onTap: () {
-                        Get.to(() => HomePage(workout: workout));
+                        showAppBottomSheet(
+                          PickWorkoutSpecsBottomSheet(workout: workout),
+                        );
                       },
                       child: CommonCard(
                         child: Column(
                           children: [
                             Expanded(
-                              child: Hero(
-                                tag: workout.image,
-                                child: Image.asset(
-                                  workout.image,
-                                  height: 50,
-                                  width: 50,
-                                ),
+                              child: Image.asset(
+                                workout.image,
+                                height: 50,
+                                width: 50,
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Hero(
-                                tag: workout.image + workout.name,
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: Text(
-                                    workout.name,
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center,
-                                  ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Text(
+                                  workout.name,
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                             ),
