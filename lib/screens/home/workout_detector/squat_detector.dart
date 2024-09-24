@@ -41,38 +41,36 @@ class SquatDetector extends BaseWorkoutDetector {
 
     final Pose pose = poses.first;
 
+    // Using Shoulder, Hip, and Knee to calculate hip angle
+    final PoseLandmark? leftShoulder = pose.landmarks[PoseLandmarkType.leftShoulder];
+    final PoseLandmark? rightShoulder = pose.landmarks[PoseLandmarkType.rightShoulder];
     final PoseLandmark? leftHip = pose.landmarks[PoseLandmarkType.leftHip];
     final PoseLandmark? rightHip = pose.landmarks[PoseLandmarkType.rightHip];
     final PoseLandmark? leftKnee = pose.landmarks[PoseLandmarkType.leftKnee];
     final PoseLandmark? rightKnee = pose.landmarks[PoseLandmarkType.rightKnee];
-    final PoseLandmark? leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle];
-    final PoseLandmark? rightAnkle =
-        pose.landmarks[PoseLandmarkType.rightAnkle];
 
     if (leftHip == null ||
         rightHip == null ||
+        leftShoulder == null ||
+        rightShoulder == null ||
         leftKnee == null ||
-        rightKnee == null ||
-        leftAnkle == null ||
-        rightAnkle == null) {
+        rightKnee == null) {
       appLogger.debug('One or more landmarks are missing');
       return;
     }
 
-    // Calculate angles for hip and knee
-    final double leftHipAngle = calculateAngle(leftKnee, leftHip, leftAnkle);
-    final double rightHipAngle =
-        calculateAngle(rightKnee, rightHip, rightAnkle);
-    final double leftKneeAngle = calculateAngle(leftHip, leftKnee, leftAnkle);
-    final double rightKneeAngle =
-        calculateAngle(rightHip, rightKnee, rightAnkle);
+    // Correctly calculate hip angles using Shoulder-Hip-Knee for squats
+    final double leftHipAngle = calculateAngle(leftShoulder, leftHip, leftKnee);
+    final double rightHipAngle = calculateAngle(rightShoulder, rightHip, rightKnee);
+    final double leftKneeAngle = calculateAngle(leftHip, leftKnee, pose.landmarks[PoseLandmarkType.leftAnkle]);
+    final double rightKneeAngle = calculateAngle(rightHip, rightKnee, pose.landmarks[PoseLandmarkType.rightAnkle]);
 
     // Define thresholds for squat phases
-    // Lifting phase: Hips and knees extending (hip angle > 160 and knee angle > 160)
+    // Lifting phase: Hips extending (hip angle > 160 and knee angle > 160)
     final bool liftingPhase = (leftHipAngle > 160 && rightHipAngle > 160) &&
         (leftKneeAngle > 160 && rightKneeAngle > 160);
 
-    // Lowering phase: Hips and knees flexing (hip angle < 120 and knee angle < 120)
+    // Lowering phase: Hips flexing (hip angle < 120 and knee angle < 120)
     final bool loweringPhase = (leftHipAngle < 120 && rightHipAngle < 120) &&
         (leftKneeAngle < 120 && rightKneeAngle < 120);
 
@@ -86,8 +84,7 @@ class SquatDetector extends BaseWorkoutDetector {
       currentSquatStatus = WorkoutProgressStatus.middlePose;
     } else if (liftingPhase) {
       appLogger.debug('SquatDetector: Squat: Lifting');
-      if (_previousProgressStatus == null ||
-          _previousProgressStatus == WorkoutProgressStatus.init) {
+      if (_previousProgressStatus == WorkoutProgressStatus.init) {
         currentSquatStatus = WorkoutProgressStatus.init;
       } else {
         currentSquatStatus = WorkoutProgressStatus.finalPose;

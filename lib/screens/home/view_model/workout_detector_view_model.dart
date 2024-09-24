@@ -15,6 +15,7 @@ import 'package:Vyayama/screens/home/workout_detector/interface/i_workout_detect
 import 'package:Vyayama/screens/home/workout_detector/interface/i_workout_detector_call_back.dart';
 import 'package:Vyayama/screens/home/workout_detector/jumping_jack_detector.dart';
 import 'package:Vyayama/screens/home/workout_detector/shoulder_press_detector.dart';
+import 'package:Vyayama/screens/home/workout_detector/squat_detector.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -76,7 +77,7 @@ class WorkoutDetectorViewModel extends GetxController
         _poseDetector = DeadliftDetector(this);
         break;
       case WorkouTypeEnums.squat:
-        // TODO: Implement Squat
+        _poseDetector = SquatDetector(this);
         break;
     }
   }
