@@ -19,7 +19,7 @@ import 'package:get/get.dart';
 
 enum WorkoutStatus { init, starting, started }
 
-class PoseDetectorViewModel extends GetxController
+class WorkoutDetectorViewModel extends GetxController
     implements IWorkoutDetectorCallback {
   final AudioPlayerHelper audioPlayerHelper = Get.put(AudioPlayerHelper());
 
@@ -32,6 +32,7 @@ class PoseDetectorViewModel extends GetxController
   Rx<bool> showCountDown = Rx<bool>(false);
   Rx<num> totalJumpingJack = Rx<num>(0);
   Rx<WorkoutStatus> workoutStatus = Rx<WorkoutStatus>(WorkoutStatus.init);
+  var workoutProgressStatus = WorkoutProgressStatus.init.obs;
   Rx<String> informationMessage = Rx<String>('');
 
   init(Workout workout) async {
@@ -128,17 +129,8 @@ class PoseDetectorViewModel extends GetxController
 
   @override
   void onPoseStatusChanged(WorkoutProgressStatus status) {
-    switch (status) {
-      case WorkoutProgressStatus.init:
-        informationMessage.value = 'Starting Position';
-        break;
-      case WorkoutProgressStatus.middlePose:
-        informationMessage.value = 'Middle Position';
-        break;
-      case WorkoutProgressStatus.finalPose:
-        informationMessage.value = 'Final Position';
-        break;
-    }
+    informationMessage.value = status.toString();
+    workoutProgressStatus.value = status;
   }
 
   @override

@@ -16,7 +16,7 @@ class UserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80,
+      height: 90,
       width: Get.width,
       child: ClipRRect(
         child: BackdropFilter(
@@ -35,63 +35,65 @@ class UserInfo extends StatelessWidget {
                 end: Alignment.centerRight,
               ),
             ),
-            child: Column(
-              children: [
-                const SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      workout.image,
-                      height: 50,
-                      width: 50,
-                    ),
-                    const SizedBox(width: 10),
-                    Material(
-                      color: Colors.transparent,
-                      child: Text(
-                        workout.name,
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        workout.image,
+                        height: 50,
+                        width: 50,
                       ),
-                    ),
-                  ],
-                ),
-                Obx(() {
-                  if (controller.isLoading.value) {
-                    return const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(child: CircularProgressIndicator()),
-                        SizedBox(width: 20),
-                        Text(
-                          "Please Wait...",
+                      const SizedBox(width: 10),
+                      Material(
+                        color: Colors.transparent,
+                        child: Text(
+                          workout.name,
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Obx(() {
+                    if (controller.isLoading.value) {
+                      return const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(child: CircularProgressIndicator()),
+                          SizedBox(width: 20),
+                          Text(
+                            "Please Wait...",
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      );
+                    } else if (controller.isLoggedIn()) {
+                      return _buildUserinfo();
+                    } else {
+                      return Container();
+                      return GestureDetector(
+                        onTap: () => controller.signInWithGoogle(),
+                        child: const Text(
+                          "Login",
                           style: TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.center,
-                        )
-                      ],
-                    );
-                  } else if (controller.isLoggedIn()) {
-                    return _buildUserinfo();
-                  } else {
-                    return Container();
-                    return GestureDetector(
-                      onTap: () => controller.signInWithGoogle(),
-                      child: const Text(
-                        "Login",
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                    );
-                  }
-                }),
-              ],
+                      );
+                    }
+                  }),
+                ],
+              ),
             ),
           ),
         ),

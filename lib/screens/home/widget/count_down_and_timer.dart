@@ -1,8 +1,8 @@
+import 'package:Vyayama/resource/theme/theme.dart';
+import 'package:Vyayama/screens/home/view_model/workout_detector_view_model.dart';
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:Vyayama/resource/theme/theme.dart';
-import 'package:Vyayama/screens/home/view_model/pose_detector_view_model.dart';
 import 'package:get/get.dart';
 
 class CountDownAndTimer extends StatefulWidget {
@@ -15,7 +15,7 @@ class CountDownAndTimer extends StatefulWidget {
 }
 
 class _CountDownAndTimerState extends State<CountDownAndTimer> {
-  final PoseDetectorViewModel viewModel = Get.find<PoseDetectorViewModel>();
+  final WorkoutDetectorViewModel viewModel = Get.find<WorkoutDetectorViewModel>();
   late int _secondsElapsed;
   late final Stopwatch _stopwatch;
   late final Ticker _ticker;

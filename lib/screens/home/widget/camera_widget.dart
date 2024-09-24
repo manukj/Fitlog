@@ -1,13 +1,16 @@
 import 'package:Vyayama/resource/constants/assets_path.dart';
-import 'package:Vyayama/screens/home/view_model/pose_detector_view_model.dart';
+import 'package:Vyayama/resource/logger/logger.dart';
+import 'package:Vyayama/resource/theme/theme.dart';
+import 'package:Vyayama/screens/home/view_model/workout_detector_view_model.dart';
 import 'package:Vyayama/screens/home/widget/button_widget.dart';
 import 'package:Vyayama/screens/home/widget/count_down_and_timer.dart';
+import 'package:Vyayama/screens/home/workout_detector/base_workout_detector.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-class CameraWidget extends GetView<PoseDetectorViewModel> {
+class CameraWidget extends GetView<WorkoutDetectorViewModel> {
   const CameraWidget({super.key});
 
   @override
@@ -58,32 +61,49 @@ class CameraWidget extends GetView<PoseDetectorViewModel> {
   }
 
   Widget _buildInformationMessage() {
-    return Obx(
-      () {
-        if (controller.informationMessage.value.isNotEmpty) {
-          return Positioned(
-            top: 80,
-            child: Container(
-              height: 110,
-              width: Get.width,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                controller.informationMessage.value,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
+    return SizedBox(
+      width: Get.width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(
+            height: 95,
+          ),
+          Obx(() {
+            var progress = controller.workoutProgressStatus.value ==
+                    WorkoutProgressStatus.middlePose
+                ? 1.0
+                : 0.0;
+            appLogger.debug('progress: $progress');
+            return Column(
+              children: [
+                AnimatedContainer(
+                  alignment: Alignment.center,
+                  duration: const Duration(milliseconds: 200),
+                  width: progress == 0.0 ? 5 : 300,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: AppThemedata.primary,
+                    border:
+                        Border.all(color: Colors.white), // Added border color
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        } else {
-          return Container();
-        }
-      },
+              ],
+            );
+          }),
+        ],
+      ),
     );
   }
 
