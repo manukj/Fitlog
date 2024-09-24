@@ -9,6 +9,7 @@ import 'package:Vyayama/screens/home/model/workout_list.dart';
 import 'package:Vyayama/screens/home/widget/summary_workout_bottom_sheet.dart';
 import 'package:Vyayama/screens/home/workout_detector/barbell_row_detector.dart';
 import 'package:Vyayama/screens/home/workout_detector/base_workout_detector.dart';
+import 'package:Vyayama/screens/home/workout_detector/bench_press_detector.dart';
 import 'package:Vyayama/screens/home/workout_detector/interface/i_workout_detector.dart';
 import 'package:Vyayama/screens/home/workout_detector/interface/i_workout_detector_call_back.dart';
 import 'package:Vyayama/screens/home/workout_detector/jumping_jack_detector.dart';
@@ -64,7 +65,7 @@ class WorkoutDetectorViewModel extends GetxController
         _poseDetector = BarbellRowDetector(this);
         break;
       case WorkouTypeEnums.benchPress:
-        // TODO: Implement BenchPress
+        _poseDetector = BenchPressDetector(this);
         break;
       case WorkouTypeEnums.shoulderPress:
         // TODO: Implement ShoulderPress
