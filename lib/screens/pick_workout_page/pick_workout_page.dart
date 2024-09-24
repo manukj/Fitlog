@@ -66,13 +66,13 @@ class PickWorkoutPage extends StatelessWidget {
                       },
                       child: CommonCard(
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Expanded(
-                              child: Image.asset(
-                                workout.image,
-                                height: 50,
-                                width: 50,
-                              ),
+                            Image.asset(
+                              workout.image,
+                              height: 50,
+                              width: 50,
+                              fit: BoxFit.scaleDown,
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
