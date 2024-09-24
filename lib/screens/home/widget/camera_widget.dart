@@ -68,7 +68,7 @@ class CameraWidget extends GetView<WorkoutDetectorViewModel> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(
-            height: 95,
+            height: 100,
           ),
           Obx(() {
             var progress = controller.workoutProgressStatus.value ==
@@ -81,7 +81,7 @@ class CameraWidget extends GetView<WorkoutDetectorViewModel> {
                 AnimatedContainer(
                   alignment: Alignment.center,
                   duration: const Duration(milliseconds: 200),
-                  width: progress == 0.0 ? 5 : 300,
+                  width: progress == 0.0 ? 10 : 300,
                   height: 10,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
