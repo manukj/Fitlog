@@ -80,14 +80,14 @@ class ShoulderPressDetector extends BaseWorkoutDetector {
 
     if (loweringPhase) {
       appLogger.debug('ShoulderPressDetector: Shoulder Press: Lowering');
-      currentShoulderPressStatus = WorkoutProgressStatus.middlePose;
+      currentShoulderPressStatus = WorkoutProgressStatus.finalPose;
     } else if (pressingPhase) {
       appLogger.debug('ShoulderPressDetector: Shoulder Press: Pressing');
       if (_previousProgressStatus == null ||
           _previousProgressStatus == WorkoutProgressStatus.init) {
         currentShoulderPressStatus = WorkoutProgressStatus.init;
       } else {
-        currentShoulderPressStatus = WorkoutProgressStatus.finalPose;
+        currentShoulderPressStatus = WorkoutProgressStatus.middlePose;
       }
     }
 

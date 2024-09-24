@@ -73,27 +73,26 @@ class DeadliftDetector extends BaseWorkoutDetector {
     final double rightKneeAngle =
         calculateAngle(rightHip, rightKnee, rightAnkle);
 
-    // Define thresholds for deadlift phases
-    // Lifting phase: Hips extending (hip angle > 150) and knees straightening (knee angle > 160)
-    final bool liftingPhase = (leftHipAngle > 150 && rightHipAngle > 150) &&
-        (leftKneeAngle > 160 && rightKneeAngle > 160);
+    // Adjusted thresholds for deadlift phases
+    // Lifting phase: Hips extending (hip angle > 165) and knees straightening (knee angle > 165)
+    final bool liftingPhase = (leftHipAngle > 165 && rightHipAngle > 165) &&
+        (leftKneeAngle > 165 && rightKneeAngle > 165);
 
-    // Lowering phase: Hips flexing (hip angle < 120) and knees bending (knee angle < 120)
-    final bool loweringPhase = (leftHipAngle < 120 && rightHipAngle < 120) &&
-        (leftKneeAngle < 120 && rightKneeAngle < 120);
+    // Lowering phase: Hips flexing (hip angle < 160) and knees bending (knee angle < 160)
+    final bool loweringPhase = (leftHipAngle < 160 && rightHipAngle < 160) &&
+        (leftKneeAngle < 160 && rightKneeAngle < 160);
 
     appLogger.debug(
-        'DeadliftDetector : Left Hip Angle: $leftHipAngle, Right Hip Angle: $rightHipAngle');
+        'DeadliftDetector: Left Hip Angle: $leftHipAngle, Right Hip Angle: $rightHipAngle');
     appLogger.debug(
-        'DeadliftDetector : Left Knee Angle: $leftKneeAngle, Right Knee Angle: $rightKneeAngle');
+        'DeadliftDetector: Left Knee Angle: $leftKneeAngle, Right Knee Angle: $rightKneeAngle');
 
     if (loweringPhase) {
       appLogger.debug('DeadliftDetector: Deadlift: Lowering');
       currentDeadliftStatus = WorkoutProgressStatus.middlePose;
     } else if (liftingPhase) {
       appLogger.debug('DeadliftDetector: Deadlift: Lifting');
-      if (_previousProgressStatus == null ||
-          _previousProgressStatus == WorkoutProgressStatus.init) {
+      if (_previousProgressStatus == WorkoutProgressStatus.init) {
         currentDeadliftStatus = WorkoutProgressStatus.init;
       } else {
         currentDeadliftStatus = WorkoutProgressStatus.finalPose;
@@ -103,6 +102,7 @@ class DeadliftDetector extends BaseWorkoutDetector {
     appLogger.debug(
         'Deadlift : previous $_previousProgressStatus current $currentDeadliftStatus');
 
+    // Counting rep when transitioning from lowering to lifting phase
     if (_previousProgressStatus == WorkoutProgressStatus.middlePose &&
         currentDeadliftStatus == WorkoutProgressStatus.finalPose) {
       totalReps++;
