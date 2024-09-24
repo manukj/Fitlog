@@ -17,7 +17,7 @@ class PickWorkoutSpecsBottomSheet extends StatefulWidget {
 class _PickWorkoutSpecsBottomSheetState
     extends State<PickWorkoutSpecsBottomSheet> {
   int selectedWeight = 10;
-  int selectedReps = 10;
+  int selectedReps = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class _PickWorkoutSpecsBottomSheetState
               _buildPickerRow(
                 label: 'Target Reps',
                 selectedValue: selectedReps - 1,
-                itemRange: 101,
+                itemRange: 11,
                 unit: 'reps',
                 onChanged: (index) => setState(() => selectedReps = index + 1),
               ),
