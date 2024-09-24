@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
-  final WorkoutType workout;
+  final Workout workout;
   final PoseDetectorViewModel poseViewModel = Get.put(PoseDetectorViewModel());
 
   HomePage({super.key, required this.workout});

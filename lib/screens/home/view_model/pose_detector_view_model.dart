@@ -21,7 +21,7 @@ class PoseDetectorViewModel extends GetxController
     implements IPoseDetectorCallback {
   final AudioPlayerHelper audioPlayerHelper = Get.put(AudioPlayerHelper());
 
-  late WorkoutType workout;
+  late Workout workout;
   late List<CameraDescription> cameras;
   IPoseDetectorService? _poseDetectorService;
   CameraController? controller;
@@ -32,7 +32,7 @@ class PoseDetectorViewModel extends GetxController
   Rx<WorkoutStatus> workoutStatus = Rx<WorkoutStatus>(WorkoutStatus.init);
   Rx<String> informationMessage = Rx<String>('');
 
-  init(WorkoutType workout) async {
+  init(Workout workout) async {
     this.workout = workout;
     initPoseDetector();
     cameras = await availableCameras();
@@ -54,22 +54,22 @@ class PoseDetectorViewModel extends GetxController
 
   void initPoseDetector() {
     switch (workout.type) {
-      case WorkouTypeEnums.JumpingJacks:
+      case WorkouTypeEnums.jumpingJacks:
         _poseDetectorService = JumpingJackDetectorService(this);
         break;
-      case WorkouTypeEnums.BarbellRow:
+      case WorkouTypeEnums.barbellRow:
         //TODO: Implement BarbellRow
         break;
-      case WorkouTypeEnums.BenchPress:
+      case WorkouTypeEnums.benchPress:
         // TODO: Implement BenchPress
         break;
-      case WorkouTypeEnums.ShoulderPress:
+      case WorkouTypeEnums.shoulderPress:
         // TODO: Implement ShoulderPress
         break;
-      case WorkouTypeEnums.Deadlift:
+      case WorkouTypeEnums.deadlift:
         // TODO: Implement Deadlift
         break;
-      case WorkouTypeEnums.Squat:
+      case WorkouTypeEnums.squat:
         // TODO: Implement Squat
         break;
     }

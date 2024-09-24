@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UserInfo extends StatelessWidget {
-  final WorkoutType workout;
+  final Workout workout;
   final AuthViewModel controller = Get.find();
   UserInfo({super.key, required this.workout});
 
@@ -41,24 +41,18 @@ class UserInfo extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Hero(
-                      tag: workout.image,
-                      child: Image.asset(
-                        workout.image,
-                        height: 50,
-                        width: 50,
-                      ),
+                    Image.asset(
+                      workout.image,
+                      height: 50,
+                      width: 50,
                     ),
                     const SizedBox(width: 10),
-                    Hero(
-                      tag: workout.image + workout.name,
-                      child: Material(
-                        color: Colors.transparent,
-                        child: Text(
-                          workout.name,
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
+                    Material(
+                      color: Colors.transparent,
+                      child: Text(
+                        workout.name,
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],

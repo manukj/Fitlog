@@ -1,33 +1,41 @@
 import 'package:Vyayama/resource/constants/assets_path.dart';
 
 enum WorkouTypeEnums {
-  JumpingJacks,
-  BarbellRow,
-  BenchPress,
-  ShoulderPress,
-  Deadlift,
-  Squat,
+  jumpingJacks,
+  barbellRow,
+  benchPress,
+  shoulderPress,
+  deadlift,
+  squat,
 }
 
 class WorkoutList {
-  static const List<WorkoutType> workouts = [
-    WorkoutType(
-        'Barbell row', AssetsPath.barbellRow, WorkouTypeEnums.BarbellRow),
-    WorkoutType(
-        'Bench press', AssetsPath.benchPress, WorkouTypeEnums.BenchPress),
-    WorkoutType('Shoulder press', AssetsPath.shoulderPress,
-        WorkouTypeEnums.ShoulderPress),
-    WorkoutType('Deadlift', AssetsPath.deadlift, WorkouTypeEnums.Deadlift),
-    WorkoutType('Squat', AssetsPath.squat, WorkouTypeEnums.Squat),
-    WorkoutType(
-        'Jumping Pack', AssetsPath.jumpingJack, WorkouTypeEnums.JumpingJacks),
+  static List<Workout> workouts = [
+    Workout('Barbell row', AssetsPath.barbellRow, WorkouTypeEnums.barbellRow),
+    Workout('Bench press', AssetsPath.benchPress, WorkouTypeEnums.benchPress),
+    Workout('Shoulder press', AssetsPath.shoulderPress,
+        WorkouTypeEnums.shoulderPress),
+    Workout('Deadlift', AssetsPath.deadlift, WorkouTypeEnums.deadlift),
+    Workout('Squat', AssetsPath.squat, WorkouTypeEnums.squat),
+    Workout(
+        'Jumping Pack', AssetsPath.jumpingJack, WorkouTypeEnums.jumpingJacks),
   ];
 }
 
-class WorkoutType {
+class Workout {
   final String name;
   final String image;
   final WorkouTypeEnums type;
+  int reps = 0;
+  int weight = 0;
 
-  const WorkoutType(this.name, this.image, this.type);
+  Workout(this.name, this.image, this.type);
+
+  void setReps(int reps) {
+    this.reps = reps;
+  }
+
+  void setWeight(int weight) {
+    this.weight = weight;
+  }
 }

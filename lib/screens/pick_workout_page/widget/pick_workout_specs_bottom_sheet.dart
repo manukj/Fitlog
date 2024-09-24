@@ -1,14 +1,16 @@
 import 'package:Vyayama/common_widget/primary_button.dart';
+import 'package:Vyayama/screens/home/home_page.dart';
 import 'package:Vyayama/screens/home/model/workout_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PickWorkoutSpecsBottomSheet extends StatefulWidget {
-  final WorkoutType workout;
+  final Workout workout;
   const PickWorkoutSpecsBottomSheet({super.key, required this.workout});
 
   @override
-  _PickWorkoutSpecsBottomSheetState createState() =>
+  State<PickWorkoutSpecsBottomSheet> createState() =>
       _PickWorkoutSpecsBottomSheetState();
 }
 
@@ -23,23 +25,17 @@ class _PickWorkoutSpecsBottomSheetState
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Hero(
-            tag: widget.workout.image + widget.workout.name,
-            child: Text(
-              widget.workout.name,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
+          Text(
+            widget.workout.name,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
             ),
           ),
           const SizedBox(height: 20),
-          Hero(
-            tag: widget.workout.image,
-            child: Image.asset(
-              widget.workout.image,
-              height: 80,
-            ),
+          Image.asset(
+            widget.workout.image,
+            height: 80,
           ),
           const SizedBox(height: 10),
           const Divider(),
@@ -73,7 +69,7 @@ class _PickWorkoutSpecsBottomSheetState
           const SizedBox(height: 20),
           PrimaryButton(
             onPressed: () {
-              // Get.to(() => const HomePage());
+              Get.to(() => HomePage(workout: widget.workout));
             },
             text: 'Proceed',
           ),
