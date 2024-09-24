@@ -1,20 +1,26 @@
 import 'package:Vyayama/resource/logger/logger.dart';
 import 'package:Vyayama/resource/painter/pose_painter.dart';
 import 'package:Vyayama/resource/util/image_util.dart';
-import 'package:Vyayama/screens/home/service/interface/i_pose_detector_call_back.dart';
-import 'package:Vyayama/screens/home/service/interface/i_pose_detector_service.dart';
+import 'package:Vyayama/screens/home/workout_detector/interface/i_workout_detector.dart';
+import 'package:Vyayama/screens/home/workout_detector/interface/i_workout_detector_call_back.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
-abstract class BasePoseDetectorService extends IPoseDetectorService {
+enum WorkoutProgressStatus {
+  init,
+  middlePose,
+  finalPose,
+}
+
+abstract class BaseWorkoutDetector extends IWorkoutDetector {
   final poseDetector = PoseDetector(options: PoseDetectorOptions());
-  final IPoseDetectorCallback _callback;
+  final IWorkoutDetectorCallback _callback;
   bool _canProcess = true;
   bool _isBusy = false;
   var totalReps = 0;
 
-  BasePoseDetectorService(this._callback);
+  BaseWorkoutDetector(this._callback);
 
   @override
   void dispose() {

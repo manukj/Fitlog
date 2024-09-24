@@ -1,7 +1,7 @@
-import 'package:Vyayama/screens/home/service/post_detector_service.dart';
+import 'package:Vyayama/screens/home/workout_detector/base_workout_detector.dart';
 import 'package:flutter/widgets.dart';
 
-abstract class IPoseDetectorCallback {
+abstract class IWorkoutDetectorCallback {
   void noPersonFound();
 
   void onPoseDetected(CustomPaint customPaint);

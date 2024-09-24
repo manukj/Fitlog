@@ -6,10 +6,12 @@ import 'package:Vyayama/resource/logger/logger.dart';
 import 'package:Vyayama/resource/toast/toast_manager.dart';
 import 'package:Vyayama/resource/util/bottom_sheet_util.dart';
 import 'package:Vyayama/screens/home/model/workout_list.dart';
-import 'package:Vyayama/screens/home/service/interface/i_pose_detector_call_back.dart';
-import 'package:Vyayama/screens/home/service/interface/i_pose_detector_service.dart';
-import 'package:Vyayama/screens/home/service/post_detector_service.dart';
 import 'package:Vyayama/screens/home/widget/summary_workout_bottom_sheet.dart';
+import 'package:Vyayama/screens/home/workout_detector/barbell_row_detector.dart';
+import 'package:Vyayama/screens/home/workout_detector/base_workout_detector.dart';
+import 'package:Vyayama/screens/home/workout_detector/interface/i_workout_detector.dart';
+import 'package:Vyayama/screens/home/workout_detector/interface/i_workout_detector_call_back.dart';
+import 'package:Vyayama/screens/home/workout_detector/jumping_jack_detector.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -18,12 +20,12 @@ import 'package:get/get.dart';
 enum WorkoutStatus { init, starting, started }
 
 class PoseDetectorViewModel extends GetxController
-    implements IPoseDetectorCallback {
+    implements IWorkoutDetectorCallback {
   final AudioPlayerHelper audioPlayerHelper = Get.put(AudioPlayerHelper());
 
   late Workout workout;
   late List<CameraDescription> cameras;
-  IPoseDetectorService? _poseDetectorService;
+  IWorkoutDetector? _poseDetector;
   CameraController? controller;
   Future<void>? initializeControllerFuture;
   Rx<CustomPaint?> customPaint = Rx<CustomPaint?>(null);
@@ -55,10 +57,10 @@ class PoseDetectorViewModel extends GetxController
   void initPoseDetector() {
     switch (workout.type) {
       case WorkouTypeEnums.jumpingJacks:
-        _poseDetectorService = JumpingJackDetectorService(this);
+        _poseDetector = JumpingJackDetector(this);
         break;
       case WorkouTypeEnums.barbellRow:
-        //TODO: Implement BarbellRow
+        _poseDetector = BarbellRowDetector(this);
         break;
       case WorkouTypeEnums.benchPress:
         // TODO: Implement BenchPress
@@ -76,16 +78,17 @@ class PoseDetectorViewModel extends GetxController
   }
 
   Future<void> startWorkout() async {
-    if (_poseDetectorService == null) {
+    if (_poseDetector == null) {
       appLogger.error('Pose Detector Service is not initialized');
-      ToastManager.showError('Something went wrong, please try different workout');
+      ToastManager.showError(
+          'Something went wrong, please try different workout');
       return;
     }
     workoutStatus.value = WorkoutStatus.starting;
     await _startCountDown();
-    _poseDetectorService!.resetCount();
+    _poseDetector!.resetCount();
     controller!.startImageStream((image) {
-      _poseDetectorService!.detectPose(
+      _poseDetector!.detectPose(
         image,
         controller!.description,
         controller!,
@@ -118,7 +121,7 @@ class PoseDetectorViewModel extends GetxController
   @override
   void onClose() {
     controller?.dispose();
-    _poseDetectorService?.dispose();
+    _poseDetector?.dispose();
     audioPlayerHelper.dispose();
     super.onClose();
   }
@@ -126,23 +129,14 @@ class PoseDetectorViewModel extends GetxController
   @override
   void onPoseStatusChanged(WorkoutProgressStatus status) {
     switch (status) {
-      case WorkoutProgressStatus.standing:
-        informationMessage.value = 'Standing';
-        break;
-      case WorkoutProgressStatus.jumpIn:
-        informationMessage.value = 'Jumping in';
-        break;
-      case WorkoutProgressStatus.jumpOut:
-        informationMessage.value = 'Jumping out';
-        break;
       case WorkoutProgressStatus.init:
-        // TODO: Handle this case.
+        informationMessage.value = 'Starting Position';
         break;
-      case WorkoutProgressStatus.completed:
-        // TODO: Handle this case.
+      case WorkoutProgressStatus.middlePose:
+        informationMessage.value = 'Middle Position';
         break;
-      case WorkoutProgressStatus.inProgress:
-        // TODO: Handle this case.
+      case WorkoutProgressStatus.finalPose:
+        informationMessage.value = 'Final Position';
         break;
     }
   }
