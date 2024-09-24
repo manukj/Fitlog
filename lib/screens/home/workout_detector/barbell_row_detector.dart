@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:Vyayama/resource/logger/logger.dart';
 import 'package:Vyayama/screens/home/workout_detector/base_workout_detector.dart';
 import 'package:Vyayama/screens/home/workout_detector/interface/i_workout_detector_call_back.dart';
@@ -9,6 +11,25 @@ class BarbellRowDetector extends BaseWorkoutDetector {
 
   BarbellRowDetector(this._callback) : super(_callback);
 
+  // Function to calculate angle between three landmarks
+  double calculateAngle(PoseLandmark? pointA, PoseLandmark? pointB, PoseLandmark? pointC) {
+    if (pointA == null || pointB == null || pointC == null) return 180;
+
+    // Calculate the angle in radians and then convert to degrees
+    final radians = atan2(pointC.y - pointB.y, pointC.x - pointB.x) -
+        atan2(pointA.y - pointB.y, pointA.x - pointB.x);
+
+    double angle = radians * (180 / pi);
+    
+    // Normalize the angle to be between 0 and 360 degrees
+    if (angle < 0) angle += 360;
+
+    // Normalize further to ensure angle is between 0 and 180 degrees
+    if (angle > 180) angle = 360 - angle;
+
+    return angle;
+  }
+
   @override
   void checkTheStatusOfPoses(List<Pose> poses) {
     WorkoutProgressStatus? currentBarbellRowStatus;
@@ -19,15 +40,14 @@ class BarbellRowDetector extends BaseWorkoutDetector {
 
     final Pose pose = poses.first;
 
-    final PoseLandmark? leftShoulder =
-        pose.landmarks[PoseLandmarkType.leftShoulder];
-    final PoseLandmark? rightShoulder =
-        pose.landmarks[PoseLandmarkType.rightShoulder];
+    final PoseLandmark? leftShoulder = pose.landmarks[PoseLandmarkType.leftShoulder];
+    final PoseLandmark? rightShoulder = pose.landmarks[PoseLandmarkType.rightShoulder];
     final PoseLandmark? leftHip = pose.landmarks[PoseLandmarkType.leftHip];
     final PoseLandmark? rightHip = pose.landmarks[PoseLandmarkType.rightHip];
     final PoseLandmark? leftWrist = pose.landmarks[PoseLandmarkType.leftWrist];
-    final PoseLandmark? rightWrist =
-        pose.landmarks[PoseLandmarkType.rightWrist];
+    final PoseLandmark? rightWrist = pose.landmarks[PoseLandmarkType.rightWrist];
+    final PoseLandmark? leftElbow = pose.landmarks[PoseLandmarkType.leftElbow];  
+    final PoseLandmark? rightElbow = pose.landmarks[PoseLandmarkType.rightElbow];  
     final PoseLandmark? leftKnee = pose.landmarks[PoseLandmarkType.leftKnee];
     final PoseLandmark? rightKnee = pose.landmarks[PoseLandmarkType.rightKnee];
 
@@ -37,32 +57,36 @@ class BarbellRowDetector extends BaseWorkoutDetector {
         rightHip == null ||
         leftWrist == null ||
         rightWrist == null ||
+        leftElbow == null ||  
+        rightElbow == null ||
         leftKnee == null ||
         rightKnee == null) {
       appLogger.debug('One or more landmarks are missing');
       return;
     }
 
-    // Calculate important distances and angles
-    final double shoulderY = (leftShoulder.y + rightShoulder.y) / 2;
-    final double wristY = (leftWrist.y + rightWrist.y) / 2;
-    final double hipY = (leftHip.y + rightHip.y) / 2;
-    final double kneeY = (leftKnee.y + rightKnee.y) / 2;
+    // Calculate normalized angles
+    final double leftBackAngle = calculateAngle(leftShoulder, leftHip, leftKnee);
+    final double rightBackAngle = calculateAngle(rightShoulder, rightHip, rightKnee);
+    final double leftArmAngle = calculateAngle(leftShoulder, leftElbow, leftWrist);  
+    final double rightArmAngle = calculateAngle(rightShoulder, rightElbow, rightWrist);
 
-    // Conditions to identify phases of the Barbell Row
-    final bool bentOverPosition = hipY < shoulderY && kneeY < hipY;
-    final bool pullingPhase = wristY < hipY; // Hands above hips implies pulling the barbell up
-    final bool loweringPhase = wristY > hipY; // Hands below hips implies lowering the barbell
+    // Adjust thresholds for bent over position based on new insights
+    final bool bentOverPosition = (leftBackAngle > 90 && leftBackAngle < 140) && (rightBackAngle > 90 && rightBackAngle < 140);
 
-    appLogger.debug('Bent Over Position: $bentOverPosition');
-    appLogger.debug('Wrist Y: $wristY, Hip Y: $hipY, Shoulder Y: $shoulderY');
+    // Adjusting the threshold for pulling phase to < 120 degrees to be less strict
+    final bool pullingPhase = (leftArmAngle < 120 && rightArmAngle < 120); // Increased threshold to <120 degrees
+    final bool loweringPhase = (leftArmAngle > 150 && rightArmAngle > 150); // Arms almost straight = lowering
+
+    appLogger.debug('BarbellRowDetector : Bent Over Position: $bentOverPosition');
+    appLogger.debug('BarbellRowDetector : Left Back Angle: $leftBackAngle, Right Back Angle: $rightBackAngle');
+    appLogger.debug('BarbellRowDetector : Left Arm Angle: $leftArmAngle, Right Arm Angle: $rightArmAngle');
 
     if (bentOverPosition && pullingPhase) {
-      appLogger.debug('Barbell Row: Pulling');
+      appLogger.debug('BarbellRowDetector: Barbell Row: Pulling');
       currentBarbellRowStatus = WorkoutProgressStatus.middlePose;
     } else if (bentOverPosition && loweringPhase) {
-      appLogger.debug('Barbell Row: Lowering');
-      // First status is detected as Lowering, which means the barbell is being lowered from the pulled position
+      appLogger.debug('BarbellRowDetector: Barbell Row: Lowering');
       if (_previousProgressStatus == null ||
           _previousProgressStatus == WorkoutProgressStatus.init) {
         currentBarbellRowStatus = WorkoutProgressStatus.init;
