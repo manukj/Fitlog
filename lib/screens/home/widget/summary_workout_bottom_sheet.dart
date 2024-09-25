@@ -1,10 +1,13 @@
 import 'package:Vyayama/common_widget/primary_button.dart';
 import 'package:Vyayama/resource/auth/auth_view_model.dart';
 import 'package:Vyayama/resource/constants/assets_path.dart';
+import 'package:Vyayama/resource/firebase/model/workour_records.dart';
 import 'package:Vyayama/resource/theme/theme.dart';
 import 'package:Vyayama/resource/toast/toast_manager.dart';
 import 'package:Vyayama/resource/util/bottom_sheet_util.dart';
+import 'package:Vyayama/resource/util/date_util.dart';
 import 'package:Vyayama/screens/home/view_model/record_view_model.dart';
+import 'package:Vyayama/screens/home/view_model/workout_detector_view_model.dart';
 import 'package:Vyayama/screens/home/widget/record_bottom_sheet/record_bottom_sheet.dart';
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
@@ -12,28 +15,25 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class SummaryWorkoutBottomSheet extends StatefulWidget {
-  final num initialTotalJumpingJack; // Keep the initial value as final
-
-  const SummaryWorkoutBottomSheet({
-    super.key,
-    required this.initialTotalJumpingJack,
-  });
+  const SummaryWorkoutBottomSheet({super.key});
 
   @override
-  _SummaryWorkoutBottomSheetState createState() =>
+  State<SummaryWorkoutBottomSheet> createState() =>
       _SummaryWorkoutBottomSheetState();
 }
 
 class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
   final TextEditingController _repsController = TextEditingController();
   var isEditing = false.obs;
-  late num totalJumpingJack; // Move totalJumpingJack to state
+  late num totalJumpingJack;
+  final WorkoutDetectorViewModel workoutDetectorViewModel =
+      Get.find<WorkoutDetectorViewModel>();
 
   @override
   void initState() {
     super.initState();
-    totalJumpingJack =
-        widget.initialTotalJumpingJack; // Initialize with initial value
+    totalJumpingJack = workoutDetectorViewModel
+        .totalJumpingJack.value; // Initialize with initial value
     _repsController.text = totalJumpingJack.toString();
   }
 
@@ -208,7 +208,13 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
           return;
         }
       }
-      await Get.find<RecordViewModel>().saveRecord(totalJumpingJack.toInt());
+      WorkoutRecord record = WorkoutRecord(
+        date: DateUtil.getToday(),
+        reps: totalJumpingJack.toInt(),
+        weight: workoutDetectorViewModel.workout.weight.toDouble(),
+        workoutID: workoutDetectorViewModel.workout.type.toString(),
+      );
+      await Get.find<RecordViewModel>().saveRecord(record);
       showAppBottomSheet(const RecordsBottomSheet());
     } catch (e) {
       ToastManager.showError("Failed to save progress");
