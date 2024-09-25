@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:Vyayama/resource/theme/theme.dart';
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -10,6 +9,7 @@ class PrimaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final double? width;
   final Color color;
+  final Color? textColor;
   final bool showShimmer;
   final TextStyle? textStyle;
 
@@ -23,6 +23,7 @@ class PrimaryButton extends StatelessWidget {
     this.color = AppThemedata.primary,
     this.prefix,
     this.textStyle,
+    this.textColor,
   }) : assert(child != null || text != null,
             'You must provide either a child or a text');
 
@@ -53,8 +54,8 @@ class PrimaryButton extends StatelessWidget {
                   Text(
                     text ?? '',
                     style: textStyle ??
-                        const TextStyle(
-                          color: Color(0xFF0A0A12),
+                        TextStyle(
+                          color: textColor ?? const Color(0xFF0A0A12),
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
