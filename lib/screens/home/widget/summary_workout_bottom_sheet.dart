@@ -61,7 +61,7 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
             ],
           );
         }),
-        const SizedBox(height: 20),
+        const SizedBox(height: 40),
         PrimaryButton(
           onPressed: () async {
             await _saveProgress(context);
@@ -85,6 +85,7 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
             fontWeight: FontWeight.bold,
           ),
         ),
+
         IconButton(
           icon: const Icon(Icons.edit),
           onPressed: () {
