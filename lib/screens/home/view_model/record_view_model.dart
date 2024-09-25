@@ -1,5 +1,6 @@
 import 'package:Vyayama/resource/firebase/db_service.dart';
 import 'package:Vyayama/resource/firebase/model/reps_record.dart';
+import 'package:Vyayama/resource/logger/logger.dart';
 import 'package:get/get.dart';
 
 class RecordViewModel extends GetxController {
@@ -15,10 +16,15 @@ class RecordViewModel extends GetxController {
   }
 
   Future<void> saveRecord(int newCount) async {
-    isLoading.value = true;
-    await _dbService.saveRecord(newCount);
-    fetchRecords();
-    isLoading.value = false;
+    try {
+      isLoading.value = true;
+      await _dbService.saveRecord(newCount);
+      fetchRecords();
+      isLoading.value = false;
+    } catch (e) {
+      appLogger.error(e.toString());
+      rethrow;
+    }
   }
 
   int? getTodayRecord() {

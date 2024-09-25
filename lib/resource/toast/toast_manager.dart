@@ -15,6 +15,18 @@ class ToastManager {
     );
   }
 
+  static void showWarning(String message,
+      {Duration duration = const Duration(seconds: 5)}) {
+    toastification.show(
+      context: Get.context,
+      title: Text(message),
+      type: ToastificationType.warning,
+      autoCloseDuration: duration,
+      style: ToastificationStyle.fillColored,
+      alignment: Alignment.bottomCenter,
+    );
+  }
+
   static void showSuccess(String message,
       {Duration duration = const Duration(seconds: 5)}) {
     toastification.show(

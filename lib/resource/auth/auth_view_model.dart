@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:Vyayama/resource/logger/logger.dart';
 import 'package:Vyayama/resource/toast/toast_manager.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -39,7 +39,7 @@ class AuthViewModel extends GetxController {
     }
   }
 
-  Future<void> signInWithGoogle() async {
+  Future<bool> signInWithGoogle() async {
     isLoading.value = true;
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -56,13 +56,15 @@ class AuthViewModel extends GetxController {
         userName.value = googleUser.displayName ?? '';
         userEmail.value = googleUser.email;
         userPhotoUrl.value = googleUser.photoUrl ?? '';
+        isLoading.value = false;
+        return true;
       }
     } catch (e) {
+      isLoading.value = false;
       appLogger.error('Error while signing in with Google: $e');
       ToastManager.showError("Login Failed");
-    } finally {
-      isLoading.value = false;
     }
+    return false;
   }
 
   Future<void> signOut() async {
@@ -71,7 +73,7 @@ class AuthViewModel extends GetxController {
       await _auth.signOut();
       await _googleSignIn.signOut();
     } catch (e) {
-      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+      ToastManager.showError("Sign out failed");
     } finally {
       isLoading.value = false;
     }

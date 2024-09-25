@@ -200,12 +200,18 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
   }
 
   Future<void> _saveProgress(BuildContext context) async {
-    var authViewModel = Get.find<AuthViewModel>();
-    if (!authViewModel.isLoggedIn()) {
-      ToastManager.showSuccess("Please login first");
-      await authViewModel.signInWithGoogle();
+    try {
+      var authViewModel = Get.find<AuthViewModel>();
+      if (!authViewModel.isLoggedIn()) {
+        if (!await authViewModel.signInWithGoogle()) {
+          ToastManager.showError("Login Failed");
+          return;
+        }
+      }
+      await Get.find<RecordViewModel>().saveRecord(totalJumpingJack.toInt());
+      showAppBottomSheet(const RecordsBottomSheet());
+    } catch (e) {
+      ToastManager.showError("Failed to save progress");
     }
-    Get.find<RecordViewModel>().saveRecord(totalJumpingJack.toInt());
-    showAppBottomSheet(const RecordsBottomSheet());
   }
 }

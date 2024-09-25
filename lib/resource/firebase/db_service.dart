@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Vyayama/resource/auth/auth_view_model.dart';
 import 'package:Vyayama/resource/firebase/model/reps_record.dart';
+import 'package:Vyayama/resource/toast/toast_manager.dart';
 import 'package:Vyayama/resource/util/date_util.dart';
-import 'package:get/get.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DbService {
   final AuthViewModel authViewModel;
@@ -20,7 +20,7 @@ class DbService {
           .collection('reps')
           .add(rep.toMap());
     } catch (e) {
-      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+      ToastManager.showError(e.toString());
     }
   }
 
@@ -29,7 +29,7 @@ class DbService {
     try {
       QuerySnapshot querySnapshot = await _firestore
           .collection('users')
-          .doc(userId)  
+          .doc(userId)
           .collection('reps')
           .orderBy('date', descending: false)
           .limit(14)
@@ -38,7 +38,7 @@ class DbService {
           .map((doc) => RepsRecord.fromMap(doc.data() as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+      ToastManager.showError(e.toString());
     }
     return repsList;
   }
@@ -69,7 +69,7 @@ class DbService {
         );
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+      rethrow;
     }
   }
 }
