@@ -4,13 +4,14 @@ import 'package:Vyayama/resource/toast/toast_manager.dart';
 import 'package:Vyayama/screens/home/model/workout_list.dart';
 import 'package:Vyayama/screens/home/view_model/workout_detector_view_model.dart';
 import 'package:Vyayama/screens/home/widget/camera_widget.dart';
-import 'package:Vyayama/screens/home/widget/user_info.dart';
+import 'package:Vyayama/screens/home/widget/user_info_workout_name.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   final Workout workout;
-  final WorkoutDetectorViewModel poseViewModel = Get.put(WorkoutDetectorViewModel());
+  final WorkoutDetectorViewModel poseViewModel =
+      Get.put(WorkoutDetectorViewModel());
 
   HomePage({super.key, required this.workout});
 
@@ -28,7 +29,7 @@ class HomePage extends StatelessWidget {
           return Stack(
             children: [
               _buildCameraWidget(snapshot),
-              UserInfo(
+              UserInfoAndWorkoutName(
                 workout: workout,
               ),
             ],

@@ -6,10 +6,10 @@ import 'package:Vyayama/screens/home/model/workout_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class UserInfo extends StatelessWidget {
+class UserInfoAndWorkoutName extends StatelessWidget {
   final Workout workout;
   final AuthViewModel controller = Get.find();
-  UserInfo({super.key, required this.workout});
+  UserInfoAndWorkoutName({super.key, required this.workout});
 
   @override
   Widget build(BuildContext context) {
