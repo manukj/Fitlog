@@ -4,6 +4,7 @@ import 'package:Vyayama/resource/theme/theme.dart';
 import 'package:Vyayama/resource/util/bottom_sheet_util.dart';
 import 'package:Vyayama/screens/home/model/workout_list.dart';
 import 'package:Vyayama/screens/pick_workout_page/widget/pick_workout_specs_bottom_sheet.dart';
+import 'package:Vyayama/screens/workout_list_page.dart/workout_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +17,7 @@ class PickWorkoutPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppThemedata.primary,
         onPressed: () {
-          // Get.to(() => const HomePage());
+          Get.to(() => WorkoutListPage());
         },
         child: const Icon(
           Icons.list,

@@ -48,7 +48,8 @@ class UserInfoAndWorkoutName extends StatelessWidget {
                       children: [
                         _buildProfilePic(isLogged),
                         _buildWorkoutInfo(),
-                        _buildLoginLogourButton(isLogged),
+                        Container(),
+                        // _buildLoginLogourButton(isLogged),
                       ],
                     ),
                   ],

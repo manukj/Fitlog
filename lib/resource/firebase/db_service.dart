@@ -12,7 +12,6 @@ class DbService {
 
   String get userId => authViewModel.user?.uid ?? '';
 
-  // Save or update a workout record
   Future<void> saveWorkoutRecord(
       String workoutID, int reps, double weight) async {
     try {
@@ -26,7 +25,6 @@ class DbService {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // If record for today exists, update it
         DocumentSnapshot doc = querySnapshot.docs.first;
         int previousReps = doc['reps'];
         double previousWeight = doc['weight'];
@@ -43,7 +41,6 @@ class DbService {
           'weight': previousWeight > weight ? previousWeight : weight,
         });
       } else {
-        // If no record exists for today, add a new one
         await _firestore
             .collection('users')
             .doc(userId)
@@ -61,7 +58,6 @@ class DbService {
     }
   }
 
-  // Fetch workout records for a specific workoutID
   Future<List<WorkoutRecord>> fetchWorkoutRecords(String workoutID) async {
     List<WorkoutRecord> workoutRecords = [];
     try {
@@ -84,11 +80,9 @@ class DbService {
     return workoutRecords;
   }
 
-  // Fetch all workout records for the current user
   Future<List<WorkoutRecord>> fetchAllWorkoutRecords() async {
     List<WorkoutRecord> allWorkoutRecords = [];
     try {
-      // Step 1: Fetch all workout IDs
       QuerySnapshot workoutSnapshots = await _firestore
           .collection('users')
           .doc(userId)
@@ -98,7 +92,6 @@ class DbService {
       List<String> workoutIDs =
           workoutSnapshots.docs.map((doc) => doc.id).toList();
 
-      // Step 2: Fetch all records for each workoutID
       for (String workoutID in workoutIDs) {
         QuerySnapshot recordSnapshots = await _firestore
             .collection('users')
@@ -123,7 +116,6 @@ class DbService {
     return allWorkoutRecords;
   }
 
-  // Fetch all workout IDs for the current user
   Future<List<String>> fetchWorkoutIDs() async {
     List<String> workoutIDs = [];
     try {
@@ -140,10 +132,8 @@ class DbService {
     return workoutIDs;
   }
 
-  // Delete a workout by workoutID
   Future<void> deleteWorkout(String workoutID) async {
     try {
-      // Step 1: Fetch all records for the workoutID and delete them
       QuerySnapshot recordSnapshots = await _firestore
           .collection('users')
           .doc(userId)
@@ -156,7 +146,6 @@ class DbService {
         await doc.reference.delete();
       }
 
-      // Step 2: Delete the workout document itself
       await _firestore
           .collection('users')
           .doc(userId)
