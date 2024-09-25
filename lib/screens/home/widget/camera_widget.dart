@@ -52,7 +52,7 @@ class CameraWidget extends GetView<WorkoutDetectorViewModel> {
           ),
         ),
         const CountDownAnimation(),
-        const WorkoutStatusIndicator(),
+        const WorkoutProgress(),
       ],
     );
   }

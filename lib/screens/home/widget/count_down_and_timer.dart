@@ -1,4 +1,3 @@
-import 'package:Vyayama/resource/theme/theme.dart';
 import 'package:Vyayama/screens/home/view_model/workout_detector_view_model.dart';
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,8 @@ class CountDownAndTimer extends StatefulWidget {
 }
 
 class _CountDownAndTimerState extends State<CountDownAndTimer> {
-  final WorkoutDetectorViewModel viewModel = Get.find<WorkoutDetectorViewModel>();
+  final WorkoutDetectorViewModel controller =
+      Get.find<WorkoutDetectorViewModel>();
   late int _secondsElapsed;
   late final Stopwatch _stopwatch;
   late final Ticker _ticker;
@@ -82,6 +82,13 @@ class _CountDownAndTimerState extends State<CountDownAndTimer> {
           duration: const Duration(seconds: 4),
           child: Column(
             children: [
+              Text(controller.informationMessage.value,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red[200],
+                  )),
+              const SizedBox(height: 10),
               AnimatedFlipCounter(
                 prefix: "Time : ",
                 suffix: " s",
@@ -93,18 +100,6 @@ class _CountDownAndTimerState extends State<CountDownAndTimer> {
                   color: Colors.grey,
                 ),
               ),
-              Obx(() {
-                return AnimatedFlipCounter(
-                  prefix: "Total Reps : ",
-                  duration: const Duration(milliseconds: 500),
-                  value: viewModel.totalJumpingJack.value,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppThemedata.onSuraface,
-                  ),
-                );
-              }),
             ],
           ),
         ),

@@ -133,7 +133,7 @@ class WorkoutDetectorViewModel extends GetxController
 
   @override
   void onPoseStatusChanged(WorkoutProgressStatus status) {
-    informationMessage.value = status.toString();
+    informationMessage.value = '';
     workoutProgressStatus.value = status;
   }
 
