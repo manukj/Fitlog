@@ -46,4 +46,11 @@ class WorkoutListViewModel extends GetxController {
       ToastManager.showError("Login failed");
     }
   }
+
+  Future<void> deleteWorkoutRecord(WorkoutRecord record) async {
+    isLoading.value = true;
+    await _dbService.deleteWorkout(record.workoutID, record.date);
+    workoutRecords.remove(record);
+    isLoading.value = false;
+  }
 }

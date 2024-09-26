@@ -1,3 +1,4 @@
+import 'package:Vyayama/common_widget/common_card.dart';
 import 'package:Vyayama/common_widget/common_error_view.dart';
 import 'package:Vyayama/common_widget/common_loader.dart';
 import 'package:Vyayama/common_widget/common_scaffold.dart';
@@ -67,19 +68,14 @@ class WorkoutListPage extends StatelessWidget {
 
   /// Build Workout Card UI
   Widget _buildWorkoutCard(Workout workout, WorkoutRecord record) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      elevation: 5,
+    return CommonCard(
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Workout Image
                 ClipRRect(
@@ -122,34 +118,17 @@ class WorkoutListPage extends StatelessWidget {
                     ],
                   ),
                 ),
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  onPressed: () {
+                    controller.deleteWorkoutRecord(record);
+                  },
+                ),
               ],
             ),
-            const SizedBox(height: 8),
-            // Display Sets in Detail
-            _buildSetDetails(record.sets),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildSetDetails(List<SetRecord> sets) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: sets.asMap().entries.map((entry) {
-        int index = entry.key;
-        SetRecord set = entry.value;
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Text(
-            'Set ${index + 1}: ${set.reps} reps, ${set.weight.toStringAsFixed(1)} kg',
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black87,
-            ),
-          ),
-        );
-      }).toList(),
     );
   }
 }

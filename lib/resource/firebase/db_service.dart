@@ -4,6 +4,7 @@ import 'package:Vyayama/resource/logger/logger.dart';
 import 'package:Vyayama/resource/toast/toast_manager.dart';
 import 'package:Vyayama/resource/util/date_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class DbService {
   final AuthViewModel authViewModel;
@@ -102,5 +103,45 @@ class DbService {
       ToastManager.showError('Error fetching workout records: $e');
     }
     return allWorkoutRecords;
+  }
+
+  Future<void> deleteWorkout(String workoutID, DateTime date) async {
+    try {
+      DocumentReference workoutRef = _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('workouts')
+          .doc(workoutID);
+
+      Timestamp dateTimestamp = Timestamp.fromDate(date);
+
+      QuerySnapshot recordSnapshots = await workoutRef
+          .collection('records')
+          .where('date', isEqualTo: dateTimestamp)
+          .get();
+
+      if (recordSnapshots.docs.isEmpty) {
+        appLogger.log(
+            'No records found for workout $workoutID on ${DateFormat('yyyy-MM-dd').format(date)}');
+        ToastManager.showError('No records found for the selected date');
+        return;
+      }
+
+      WriteBatch batch = _firestore.batch();
+
+      for (DocumentSnapshot doc in recordSnapshots.docs) {
+        batch.delete(doc.reference);
+      }
+
+      await batch.commit();
+
+      appLogger.log(
+          'Deleted workout records for $workoutID on ${DateFormat('yyyy-MM-dd').format(date)}');
+      ToastManager.showSuccess("Workout records deleted successfully ");
+    } catch (e) {
+      appLogger.error(
+          'Error deleting workout records for $workoutID on ${DateFormat('yyyy-MM-dd').format(date)}: $e');
+      ToastManager.showError('Error deleting workout records.');
+    }
   }
 }
