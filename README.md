@@ -1,7 +1,7 @@
-# JumpSync!
-[Download APK](https://drive.google.com/file/d/1_wKXLAs47vserhD_P3m7QL_7i8fSVvii/view?usp=drive_link)
+# Fitlog!
+
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/47d2cf46-e2c4-451d-96fe-91b6c55ee7c1" alt="logo">
+  <img src="https://github.com/user-attachments/assets/2d8f22c0-3b5a-4420-b50c-ad80861e47a8" alt="logo">
 </p>
 
 ## Table of Contents
