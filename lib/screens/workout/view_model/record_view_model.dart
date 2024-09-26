@@ -1,6 +1,7 @@
 import 'package:Vyayama/resource/firebase/db_service.dart';
 import 'package:Vyayama/resource/firebase/model/workour_records.dart';
 import 'package:Vyayama/resource/logger/logger.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class RecordViewModel extends GetxController {
@@ -18,9 +19,7 @@ class RecordViewModel extends GetxController {
   Future<void> saveRecord(WorkoutRecord record) async {
     try {
       isLoading.value = true;
-      await _dbService.saveWorkoutRecord(
-        record
-      );
+      await _dbService.saveWorkoutRecord(record);
       fetchRecords();
       isLoading.value = false;
     } catch (e) {
@@ -29,12 +28,13 @@ class RecordViewModel extends GetxController {
     }
   }
 
-  int? getTodayRecord() {
-    // final today = DateTime.now();
-    // final record = records.value.firstWhere(
-    //   (element) => element.date.day == today.day,
-    //   orElse: () => RepsRecord(date: today, count: 0),
-    // );
-    // return record.count;
+  WorkoutRecord? getTodayRecord(String workoutID, DateTime date) {
+    for (final record in records.value) {
+      if (record.workoutID == workoutID &&
+          DateUtils.isSameDay(record.date, date)) {
+        return record;
+      }
+    }
+    return null;
   }
 }

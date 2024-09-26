@@ -71,13 +71,20 @@ class WorkoutHistoryPage extends StatelessWidget {
   Widget _buildWorkoutCard(Workout workout, WorkoutRecord record) {
     return CommonCard(
       onPressed: () {
-        showAppBottomSheet(EditSetsBottomSheet(
-          sets: record.sets,
-          onSave: () async {
-            controller.updateWorkoutRecord(record);
-            Get.back();
-          },
-        ));
+        showAppBottomSheet(
+          EditSetsBottomSheet(
+            sets: record.sets,
+            onSave: () async {
+              controller.updateWorkoutRecord(record);
+              Get.back();
+            },
+            onDeleteSet: (SetRecord setRecord) {
+              record.sets.remove(setRecord);
+              controller.updateWorkoutRecord(record);
+              Get.back();
+            },
+          ),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.all(12.0),

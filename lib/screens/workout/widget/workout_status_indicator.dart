@@ -66,7 +66,7 @@ class WorkoutProgress extends GetView<WorkoutDetectorViewModel> {
                         prefix: " Reps : ",
                         suffix: " / ${controller.workout.reps.toString()}",
                         duration: const Duration(milliseconds: 500),
-                        value: controller.totalJumpingJack.value,
+                        value: controller.totalReps.value,
                         textStyle: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

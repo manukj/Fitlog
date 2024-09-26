@@ -34,7 +34,7 @@ class WorkoutDetectorViewModel extends GetxController
   Future<void>? initializeControllerFuture;
   Rx<CustomPaint?> customPaint = Rx<CustomPaint?>(null);
   Rx<bool> showCountDown = Rx<bool>(false);
-  Rx<num> totalJumpingJack = Rx<num>(0);
+  Rx<num> totalReps = Rx<num>(0);
   Rx<WorkoutStatus> workoutStatus = Rx<WorkoutStatus>(WorkoutStatus.init);
   var workoutProgressStatus = WorkoutProgressStatus.init.obs;
   Rx<String> informationMessage = Rx<String>('');
@@ -111,7 +111,7 @@ class WorkoutDetectorViewModel extends GetxController
     Future.delayed(const Duration(seconds: 1), () {
       customPaint.value = null;
       informationMessage.value = '';
-      totalJumpingJack.value = 0;
+      totalReps.value = 0;
     });
   }
 
@@ -144,7 +144,7 @@ class WorkoutDetectorViewModel extends GetxController
 
   @override
   void onWorkoutCompleted(int count) {
-    totalJumpingJack.value = count;
+    totalReps.value = count;
     audioPlayerHelper.play();
   }
 

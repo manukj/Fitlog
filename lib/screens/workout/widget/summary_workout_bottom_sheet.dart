@@ -25,22 +25,21 @@ class SummaryWorkoutBottomSheet extends StatefulWidget {
 class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
   final TextEditingController _repsController = TextEditingController();
   var isEditing = false.obs;
-  late num totalJumpingJack;
+  late num totalReps;
   final WorkoutDetectorViewModel workoutDetectorViewModel =
       Get.find<WorkoutDetectorViewModel>();
 
   @override
   void initState() {
     super.initState();
-    totalJumpingJack = workoutDetectorViewModel
-        .totalJumpingJack.value; // Initialize with initial value
-    _repsController.text = totalJumpingJack.toString();
+    totalReps = workoutDetectorViewModel.totalReps.value;
+    _repsController.text = totalReps.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: totalJumpingJack == 0
+      child: totalReps == 0
           ? _buildNoRepWidget()
           : _buildRepSummaryWidget(context),
     );
@@ -80,7 +79,7 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
       children: [
         // Non-editable display with AnimatedFlipCounter
         AnimatedFlipCounter(
-          value: totalJumpingJack,
+          value: totalReps,
           prefix: "Total Reps: ",
           textStyle: const TextStyle(
             fontSize: 29,
@@ -177,7 +176,7 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
     }
 
     setState(() {
-      totalJumpingJack = newReps; // Update the totalJumpingJack in the state
+      totalReps = newReps; // Update the totalJumpingJack in the state
       isEditing.value = false;
     });
   }
@@ -193,7 +192,7 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
       }
 
       SetRecord set = SetRecord(
-        reps: totalJumpingJack.toInt(),
+        reps: totalReps.toInt(),
         weight: workoutDetectorViewModel.workout.weight.toDouble(),
       );
 
@@ -203,7 +202,7 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
         workoutID: workoutDetectorViewModel.workout.type.toString(),
       );
       await Get.find<RecordViewModel>().saveRecord(record);
-      showAppBottomSheet(const RecordsBottomSheet());
+      showAppBottomSheet(RecordsBottomSheet(record));
     } catch (e) {
       ToastManager.showError("Failed to save progress");
     }
