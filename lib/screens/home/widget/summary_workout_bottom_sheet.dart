@@ -62,11 +62,15 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
           );
         }),
         const SizedBox(height: 40),
-        PrimaryButton(
-          onPressed: () async {
-            await _saveProgress(context);
-          },
-          text: "Save Progress",
+        Builder(
+          builder: (context) {
+            return PrimaryButton(
+              onPressed: () async {
+                await _saveProgress(context);
+              },
+              text: "Save Progress",
+            );
+          }
         ),
       ],
     );
@@ -85,7 +89,6 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
             fontWeight: FontWeight.bold,
           ),
         ),
-
         IconButton(
           icon: const Icon(Icons.edit),
           onPressed: () {
@@ -156,31 +159,13 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
         const SizedBox(height: 20),
         _buildEditMode(), // Allow user to input reps even if no reps are detected
         const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: Get.width / 2 - 20,
-              child: PrimaryButton(
-                color: const Color(0xFF0A0A12),
-                textColor: AppThemedata.primary,
-                onPressed: () {
-                  Get.back();
-                },
-                text: "Retry",
-              ),
-            ),
-            const SizedBox(width: 10),
-            SizedBox(
-              width: Get.width / 2 - 20,
-              child: PrimaryButton(
-                onPressed: () async {
-                  await _saveProgress(context);
-                },
-                text: "Save Progress",
-              ),
-            ),
-          ],
+        PrimaryButton(
+          color: const Color(0xFF0A0A12),
+          textColor: AppThemedata.primary,
+          onPressed: () {
+            Get.back();
+          },
+          text: "Retry",
         ),
       ],
     );

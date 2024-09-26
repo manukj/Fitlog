@@ -4,7 +4,7 @@ import 'package:Vyayama/resource/firebase/model/workour_records.dart';
 import 'package:Vyayama/resource/toast/toast_manager.dart';
 import 'package:get/get.dart';
 
-class WorkoutListController extends GetxController {
+class WorkoutListViewModel extends GetxController {
   final DbService _dbService = Get.find<DbService>();
   final AuthViewModel _authViewModel =
       Get.find<AuthViewModel>(); // Get the AuthViewModel instance
