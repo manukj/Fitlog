@@ -15,7 +15,8 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class SummaryWorkoutBottomSheet extends StatefulWidget {
-  const SummaryWorkoutBottomSheet({super.key});
+  final num totalReps;
+  const SummaryWorkoutBottomSheet({super.key, required this.totalReps});
 
   @override
   State<SummaryWorkoutBottomSheet> createState() =>
@@ -32,7 +33,7 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
   @override
   void initState() {
     super.initState();
-    totalReps = workoutDetectorViewModel.totalReps.value;
+    totalReps = widget.totalReps;
     _repsController.text = totalReps.toString();
   }
 
@@ -77,7 +78,6 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Non-editable display with AnimatedFlipCounter
         AnimatedFlipCounter(
           value: totalReps,
           prefix: "Total Reps: ",

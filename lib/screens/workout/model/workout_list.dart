@@ -11,7 +11,6 @@ enum WorkouTypeEnums {
 
 class WorkoutList {
   static List<Workout> workouts = [
-    Workout('Barbell row', AssetsPath.barbellRow, WorkouTypeEnums.barbellRow),
     Workout('Bench press', AssetsPath.benchPress, WorkouTypeEnums.benchPress),
     Workout('Shoulder press', AssetsPath.shoulderPress,
         WorkouTypeEnums.shoulderPress),
@@ -19,6 +18,7 @@ class WorkoutList {
     Workout('Squat', AssetsPath.squat, WorkouTypeEnums.squat),
     Workout(
         'Jumping Jack', AssetsPath.jumpingJack, WorkouTypeEnums.jumpingJacks),
+    Workout('Barbell row', AssetsPath.barbellRow, WorkouTypeEnums.barbellRow),
   ];
 }
 

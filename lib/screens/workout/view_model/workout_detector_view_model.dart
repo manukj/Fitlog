@@ -105,8 +105,9 @@ class WorkoutDetectorViewModel extends GetxController
     controller!.stopImageStream();
     workoutStatus.value = WorkoutStatus.init;
     showAppBottomSheet(
-      const SummaryWorkoutBottomSheet(),
-      isDismissible: false,
+      SummaryWorkoutBottomSheet(
+        totalReps: totalReps.value,
+      ),
     );
     Future.delayed(const Duration(seconds: 1), () {
       customPaint.value = null;
