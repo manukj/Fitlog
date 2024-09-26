@@ -64,7 +64,7 @@ FitLog is a workout tracking app designed to record and log workout sessions.
    make all
    ```
 
-##Package Used 
+## Package Used 
 - ⚡ get: For State and Navigation Managment 
 - 👤 google_mlkit_pose_detection: For live pose detection
 - 📷 camera: To embed the system camera into the app
