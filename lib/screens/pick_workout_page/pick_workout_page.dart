@@ -37,7 +37,7 @@ class PickWorkoutPage extends StatelessWidget {
                     color: AppThemedata.onSuraface.withOpacity(0.8)),
               ),
               const Text(
-                "Vyayama",
+                "FitLog",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
             ],
