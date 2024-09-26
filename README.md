@@ -41,9 +41,9 @@ FitLog is a workout tracking app designed to record and log workout sessions.
 4. Start Workout: Click "Start Workout" and a 5-second timer will give you time to get into position.
 5. Real-Time Feedback: Visual and audio feedback will help guide you through each rep, ensuring you stay on track.
 6. View Previous Record, Edit and Delete the Records
-
-![Group 1](https://github.com/user-attachments/assets/14b3aa82-80b8-46f4-b286-f0ed29fbb5b1)
-![Group 2](https://github.com/user-attachments/assets/49263100-231e-481c-bd09-576abc0e4bd4)
+![1](https://github.com/user-attachments/assets/25f3441d-56b5-4cba-826e-2c4f040a8111)
+![2](https://github.com/user-attachments/assets/9aa88212-0b88-40a0-9067-0e9338f85fe4)
+![3](https://github.com/user-attachments/assets/5576ed12-3e61-46e7-92bf-7eb7a61e8e05)
 
 
 ## Installation
