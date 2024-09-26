@@ -62,16 +62,14 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
           );
         }),
         const SizedBox(height: 40),
-        Builder(
-          builder: (context) {
-            return PrimaryButton(
-              onPressed: () async {
-                await _saveProgress(context);
-              },
-              text: "Save Progress",
-            );
-          }
-        ),
+        Builder(builder: (context) {
+          return PrimaryButton(
+            onPressed: () async {
+              await _saveProgress(context);
+            },
+            text: "Save Progress",
+          );
+        }),
       ],
     );
   }
@@ -193,10 +191,15 @@ class _SummaryWorkoutBottomSheetState extends State<SummaryWorkoutBottomSheet> {
           return;
         }
       }
-      WorkoutRecord record = WorkoutRecord(
-        date: DateUtil.getToday(),
+
+      SetRecord set = SetRecord(
         reps: totalJumpingJack.toInt(),
         weight: workoutDetectorViewModel.workout.weight.toDouble(),
+      );
+
+      WorkoutRecord record = WorkoutRecord(
+        date: DateUtil.getToday(),
+        sets: [set],
         workoutID: workoutDetectorViewModel.workout.type.toString(),
       );
       await Get.find<RecordViewModel>().saveRecord(record);

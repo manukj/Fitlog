@@ -19,9 +19,7 @@ class RecordViewModel extends GetxController {
     try {
       isLoading.value = true;
       await _dbService.saveWorkoutRecord(
-        record.workoutID,
-        record.reps,
-        record.weight,
+        record
       );
       fetchRecords();
       isLoading.value = false;

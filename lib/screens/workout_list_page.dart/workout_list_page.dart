@@ -7,6 +7,7 @@ import 'package:Vyayama/screens/home/model/workout_list.dart';
 import 'package:Vyayama/screens/workout_list_page.dart/view_model/workout_list_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class WorkoutListPage extends StatelessWidget {
   WorkoutListPage({super.key});
@@ -64,6 +65,7 @@ class WorkoutListPage extends StatelessWidget {
     );
   }
 
+  /// Build Workout Card UI
   Widget _buildWorkoutCard(Workout workout, WorkoutRecord record) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -73,58 +75,81 @@ class WorkoutListPage extends StatelessWidget {
       elevation: 5,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Row(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image.asset(
-                workout.image,
-                width: 80,
-                height: 80,
-                fit: BoxFit.cover,
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Workout Image
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.asset(
+                    workout.image,
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                // Workout Info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        workout.name,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Date: ${DateFormat('yyyy-MM-dd').format(record.date)}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Total Sets: ${record.sets.length}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    workout.name,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Date: ${record.date}', // Assuming `record.date` is a formatted date string
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Total Reps: ${record.reps}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Weight: ${record.weight.toStringAsFixed(1)} kg',
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            const SizedBox(height: 8),
+            // Display Sets in Detail
+            _buildSetDetails(record.sets),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSetDetails(List<SetRecord> sets) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: sets.asMap().entries.map((entry) {
+        int index = entry.key;
+        SetRecord set = entry.value;
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Text(
+            'Set ${index + 1}: ${set.reps} reps, ${set.weight.toStringAsFixed(1)} kg',
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black87,
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }
