@@ -4,14 +4,16 @@ import 'package:Vyayama/common_widget/common_loader.dart';
 import 'package:Vyayama/common_widget/common_scaffold.dart';
 import 'package:Vyayama/resource/constants/assets_path.dart';
 import 'package:Vyayama/resource/firebase/model/workour_records.dart';
+import 'package:Vyayama/resource/util/bottom_sheet_util.dart';
 import 'package:Vyayama/screens/home/model/workout_list.dart';
-import 'package:Vyayama/screens/workout_list_page.dart/view_model/workout_list_view_model.dart';
+import 'package:Vyayama/screens/workout_history_page.dart/view_model/workout_list_view_model.dart';
+import 'package:Vyayama/screens/workout_history_page.dart/widget/edit_set_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class WorkoutListPage extends StatelessWidget {
-  WorkoutListPage({super.key});
+class WorkoutHistoryPage extends StatelessWidget {
+  WorkoutHistoryPage({super.key});
   final WorkoutListViewModel controller = Get.put(WorkoutListViewModel());
 
   @override
@@ -66,9 +68,17 @@ class WorkoutListPage extends StatelessWidget {
     );
   }
 
-  /// Build Workout Card UI
   Widget _buildWorkoutCard(Workout workout, WorkoutRecord record) {
     return CommonCard(
+      onPressed: () {
+        showAppBottomSheet(EditSetsBottomSheet(
+          sets: record.sets,
+          onSave: () {
+            // controller.updateWorkoutRecord(record);
+            Get.back();
+          },
+        ));
+      },
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
@@ -78,14 +88,11 @@ class WorkoutListPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Workout Image
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Image.asset(
-                    workout.image,
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.cover,
-                  ),
+                Image.asset(
+                  workout.image,
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
                 ),
                 const SizedBox(width: 16),
                 // Workout Info

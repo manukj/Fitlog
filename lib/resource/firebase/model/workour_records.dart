@@ -38,7 +38,6 @@ class SetRecord {
     required this.weight,
   });
 
-  // Convert SetRecord to a map to store in Firestore
   Map<String, dynamic> toMap() {
     return {
       'reps': reps,
@@ -46,7 +45,6 @@ class SetRecord {
     };
   }
 
-  // Convert from Firestore Map to SetRecord object
   static SetRecord fromMap(Map<String, dynamic> data) {
     return SetRecord(
       reps: data['reps'],

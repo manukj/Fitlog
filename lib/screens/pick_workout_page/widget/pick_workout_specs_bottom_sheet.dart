@@ -58,10 +58,10 @@ class _PickWorkoutSpecsBottomSheetState
               ),
               _buildPickerRow(
                 label: 'Target Reps',
-                selectedValue: selectedReps - 1,
+                selectedValue: selectedReps,
                 itemRange: 11,
                 unit: 'reps',
-                onChanged: (index) => setState(() => selectedReps = index + 1),
+                onChanged: (index) => setState(() => selectedReps = index),
               ),
             ],
           ),
