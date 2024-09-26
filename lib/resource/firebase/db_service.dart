@@ -144,4 +144,45 @@ class DbService {
       ToastManager.showError('Error deleting workout records.');
     }
   }
+
+  Future<void> updateWorkoutRecordSets(WorkoutRecord record) async {
+    var workoutID = record.workoutID;
+    var updatedSets = record.sets;
+    var date = record.date;
+    try {
+      DocumentReference workoutRef = _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('workouts')
+          .doc(workoutID);
+
+      Timestamp dateTimestamp = Timestamp.fromDate(date);
+
+      QuerySnapshot querySnapshot = await workoutRef
+          .collection('records')
+          .where('date', isEqualTo: dateTimestamp)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot doc = querySnapshot.docs.first;
+
+        await workoutRef.collection('records').doc(doc.id).update({
+          'sets': updatedSets.map((set) => set.toMap()).toList(),
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
+
+        appLogger.log(
+            'Updated workout $workoutID for date ${DateFormat('yyyy-MM-dd').format(date)} with new sets');
+        ToastManager.showSuccess('Workout updated successfully');
+      } else {
+        appLogger.log(
+            'No workout record found for $workoutID on ${DateFormat('yyyy-MM-dd').format(date)}');
+        ToastManager.showError('No workout record found for the selected date');
+      }
+    } catch (e) {
+      appLogger.error(
+          'Error updating workout records for $workoutID on ${DateFormat('yyyy-MM-dd').format(date)}: $e');
+      ToastManager.showError('Error updating workout records.');
+    }
+  }
 }

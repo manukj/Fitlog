@@ -62,7 +62,8 @@ class SetRow extends StatelessWidget {
   final SetRecord set;
   final ValueChanged<SetRecord> onChanged;
 
-  SetRow({
+  const SetRow({
+    super.key,
     required this.index,
     required this.set,
     required this.onChanged,
@@ -87,7 +88,6 @@ class SetRow extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 16),
-          // Reps input
           Expanded(
             child: TextField(
               controller: repsController,
@@ -103,7 +103,6 @@ class SetRow extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 16),
-          // Weight input
           Expanded(
             child: TextField(
               controller: weightController,

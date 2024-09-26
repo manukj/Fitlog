@@ -22,17 +22,20 @@ class CameraWidget extends GetView<WorkoutDetectorViewModel> {
           var deviceRatio = Get.width / (height);
           return Align(
             alignment: Alignment.center,
-            child: AnimatedScale(
-              duration: const Duration(
-                milliseconds: 1500,
-              ),
-              scale: (controller.controller!.value.aspectRatio / deviceRatio) *
-                  0.5,
-              child: CameraPreview(
-                controller.controller!,
-                child: Obx(() {
-                  return controller.customPaint.value ?? Container();
-                }),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: AnimatedScale(
+                duration: const Duration(
+                  milliseconds: 1500,
+                ),
+                scale: (controller.controller!.value.aspectRatio / deviceRatio) *
+                    0.5,
+                child: CameraPreview(
+                  controller.controller!,
+                  child: Obx(() {
+                    return controller.customPaint.value ?? Container();
+                  }),
+                ),
               ),
             ),
           );

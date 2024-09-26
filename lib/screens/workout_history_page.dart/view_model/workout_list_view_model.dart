@@ -53,4 +53,12 @@ class WorkoutListViewModel extends GetxController {
     workoutRecords.remove(record);
     isLoading.value = false;
   }
+
+  Future<void> updateWorkoutRecord(WorkoutRecord record) async {
+    isLoading.value = true;
+    await _dbService.updateWorkoutRecordSets(record).then((value) {
+      isLoading.value = false;
+    });
+    isLoading.value = false;
+  }
 }

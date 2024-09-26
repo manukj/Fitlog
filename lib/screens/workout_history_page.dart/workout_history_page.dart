@@ -73,8 +73,8 @@ class WorkoutHistoryPage extends StatelessWidget {
       onPressed: () {
         showAppBottomSheet(EditSetsBottomSheet(
           sets: record.sets,
-          onSave: () {
-            // controller.updateWorkoutRecord(record);
+          onSave: () async {
+            controller.updateWorkoutRecord(record);
             Get.back();
           },
         ));
