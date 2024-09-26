@@ -1,5 +1,4 @@
-# Fitlog!
-
+# Fitlog 📝
 <p align="center">
   <img src="https://github.com/user-attachments/assets/2d8f22c0-3b5a-4420-b50c-ad80861e47a8" alt="logo">
 </p>
@@ -7,32 +6,51 @@
 ## Table of Contents
 
 - [Introduction](#introduction)
+- [Demo](#demo)
 - [Features](#features)
-- [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
+- [Installation](#installation)
+- [Package Used](#packageUsed)
 - [License](#license)
 - [Contact](#contact)
-
+  
 ## Introduction
 
-Welcome to JumpSync! This application helps you track jumping jacks, allowing you to record your progress.
+FitLog is a workout tracking app designed to record and log workout sessions.
+
+## DEMO 
+
+[DEMO VIDEO](https://www.youtube.com/watch?v=4o-3HzRZatU)
+
+
+[APK LINK](https://drive.google.com/file/d/13uAV8wzIOiHhVsg6v_JVTiZ-wJPk5Yra/view?usp=sharing)
 
 ## Features
 
-- Record yourself to detect the jumping jacks.
-- Receive audio feedback for each successful completion.
-- Record your workout.
-- See the progress of your last 15 days of workouts.
-- Sync across multiple devices.
+- 📋 Workout Logs: Track and record your workouts efficiently.
+- 🎥 Live Pose Detection: Uses camera input to detect body posture and count reps automatically.
+- 🏋️ Multiple Workouts: Choose from a variety of workouts such as shoulder press, barbell row, deadlift, and more.
+- 📝 Weight and Reps Input: Specify your desired weight and reps before starting the workout.
+- 🔊 Real-Time Feedback: Both audio and visual feedback are provided during workouts to help users maintain form and track progress.
+- Cross platform : made with Flutter ❤️
+    
+## Usage
+1. Select Workout: Choose from a variety of workout options.
+2. Input Details: Enter the weight and target reps.
+3. Live Pose Detection: Once you click "Proceed," the live camera will open to track your movement.
+4. Start Workout: Click "Start Workout" and a 5-second timer will give you time to get into position.
+5. Real-Time Feedback: Visual and audio feedback will help guide you through each rep, ensuring you stay on track.
+6. View Previous Record, Edit and Delete the Records
+
+![Group 1](https://github.com/user-attachments/assets/14b3aa82-80b8-46f4-b286-f0ed29fbb5b1)
+![Group 2](https://github.com/user-attachments/assets/49263100-231e-481c-bd09-576abc0e4bd4)
+
 
 ## Installation
 
 ### Prerequisites
 - Flutter Version : 3.22.2
 - Android Version : 23+ 
-
-### Steps
 1. Clone the repository:
    ```bash
    git clone <project-github-link>
@@ -46,18 +64,16 @@ Welcome to JumpSync! This application helps you track jumping jacks, allowing yo
    make all
    ```
 
-## Usage
-- Allow camera permission.
-- Click on Start Workout, and record yourself doing jumping jacks from the app. Once you're done with the workout,
-- Click on Stop Workout.
-- You are asked to save the workout. If you choose to save it, you will be asked to sign in with Google to save the record.
-- Login can also be done on the initial page.
-- If the user is already signed in, their name and Google profile picture are shown above. Clicking on it will open their workout records.
+##Package Used 
+- ⚡ get: For State and Navigation Managment 
+- 👤 google_mlkit_pose_detection: For live pose detection
+- 📷 camera: To embed the system camera into the app
+- 🔐 firebase_core, firebase_auth, google_sign_in, cloud_firestore: For authentication and record storage
+- 🎞️ lottie: For motion animations
+- ✨ neopop: For beautiful, affirmative buttons
+- 🔔 toastification: For displaying toast messages
+- 🎧 audioplayers: To play audio within the app
 
-For more detailed usage instructions, refer to the [User Guide](link-to-user-guide).
-![Group 1](https://github.com/user-attachments/assets/14b3aa82-80b8-46f4-b286-f0ed29fbb5b1)
-![Group 2](https://github.com/user-attachments/assets/49263100-231e-481c-bd09-576abc0e4bd4)
-[Jumping jack Video used for demo](https://www.youtube.com/watch?v=sRDmKd5G8m4)
 
 ## Contributing
 
@@ -78,4 +94,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 
 For questions or support, please contact manu1998kj@gmail.com 
-```
+
