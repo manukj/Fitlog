@@ -5,7 +5,7 @@ import 'package:Vyayama/common_widget/common_scaffold.dart';
 import 'package:Vyayama/resource/constants/assets_path.dart';
 import 'package:Vyayama/resource/firebase/model/workour_records.dart';
 import 'package:Vyayama/resource/util/bottom_sheet_util.dart';
-import 'package:Vyayama/screens/home/model/workout_list.dart';
+import 'package:Vyayama/screens/workout/model/workout_list.dart';
 import 'package:Vyayama/screens/workout_history_page.dart/view_model/workout_list_view_model.dart';
 import 'package:Vyayama/screens/workout_history_page.dart/widget/edit_set_bottom_sheet.dart';
 import 'package:flutter/material.dart';

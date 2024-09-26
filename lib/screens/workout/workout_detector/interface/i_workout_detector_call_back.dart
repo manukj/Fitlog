@@ -1,4 +1,4 @@
-import 'package:Vyayama/screens/home/workout_detector/base_workout_detector.dart';
+import 'package:Vyayama/screens/workout/workout_detector/base_workout_detector.dart';
 import 'package:flutter/widgets.dart';
 
 abstract class IWorkoutDetectorCallback {

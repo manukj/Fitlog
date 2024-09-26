@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:Vyayama/common_widget/common_loader.dart';
 import 'package:Vyayama/common_widget/primary_button.dart';
 import 'package:Vyayama/resource/constants/assets_path.dart';
-import 'package:Vyayama/screens/home/view_model/record_view_model.dart';
-import 'package:Vyayama/screens/home/widget/record_bottom_sheet/record_bar_chart.dart';
+import 'package:Vyayama/screens/workout/view_model/record_view_model.dart';
+import 'package:Vyayama/screens/workout/widget/record_bottom_sheet/record_bar_chart.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 

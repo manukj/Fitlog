@@ -1,6 +1,6 @@
 import 'package:Vyayama/common_widget/primary_button.dart';
 import 'package:Vyayama/resource/theme/theme.dart';
-import 'package:Vyayama/screens/home/view_model/workout_detector_view_model.dart';
+import 'package:Vyayama/screens/workout/view_model/workout_detector_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:Vyayama/resource/auth/auth_view_model.dart';
 import 'package:Vyayama/resource/theme/theme.dart';
-import 'package:Vyayama/screens/home/model/workout_list.dart';
+import 'package:Vyayama/screens/workout/model/workout_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

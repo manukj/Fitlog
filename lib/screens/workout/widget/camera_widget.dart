@@ -1,8 +1,8 @@
-import 'package:Vyayama/screens/home/view_model/workout_detector_view_model.dart';
-import 'package:Vyayama/screens/home/widget/button_widget.dart';
-import 'package:Vyayama/screens/home/widget/count_down_and_timer.dart';
-import 'package:Vyayama/screens/home/widget/count_down_animation.dart';
-import 'package:Vyayama/screens/home/widget/workout_status_indicator.dart';
+import 'package:Vyayama/screens/workout/view_model/workout_detector_view_model.dart';
+import 'package:Vyayama/screens/workout/widget/button_widget.dart';
+import 'package:Vyayama/screens/workout/widget/count_down_and_timer.dart';
+import 'package:Vyayama/screens/workout/widget/count_down_animation.dart';
+import 'package:Vyayama/screens/workout/widget/workout_status_indicator.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

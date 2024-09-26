@@ -1,19 +1,19 @@
 import 'package:Vyayama/common_widget/common_error_view.dart';
 import 'package:Vyayama/common_widget/common_loader.dart';
 import 'package:Vyayama/resource/toast/toast_manager.dart';
-import 'package:Vyayama/screens/home/model/workout_list.dart';
-import 'package:Vyayama/screens/home/view_model/workout_detector_view_model.dart';
-import 'package:Vyayama/screens/home/widget/camera_widget.dart';
-import 'package:Vyayama/screens/home/widget/user_info_workout_name.dart';
+import 'package:Vyayama/screens/workout/model/workout_list.dart';
+import 'package:Vyayama/screens/workout/view_model/workout_detector_view_model.dart';
+import 'package:Vyayama/screens/workout/widget/camera_widget.dart';
+import 'package:Vyayama/screens/workout/widget/user_info_workout_name.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomePage extends StatelessWidget {
+class WorkoutPage extends StatelessWidget {
   final Workout workout;
   final WorkoutDetectorViewModel poseViewModel =
       Get.put(WorkoutDetectorViewModel());
 
-  HomePage({super.key, required this.workout});
+  WorkoutPage({super.key, required this.workout});
 
   Future<void> _initializeCamera() async {
     await poseViewModel.init(workout);

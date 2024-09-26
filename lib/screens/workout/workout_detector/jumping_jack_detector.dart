@@ -1,6 +1,6 @@
 import 'package:Vyayama/resource/logger/logger.dart';
-import 'package:Vyayama/screens/home/workout_detector/base_workout_detector.dart';
-import 'package:Vyayama/screens/home/workout_detector/interface/i_workout_detector_call_back.dart';
+import 'package:Vyayama/screens/workout/workout_detector/base_workout_detector.dart';
+import 'package:Vyayama/screens/workout/workout_detector/interface/i_workout_detector_call_back.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 class JumpingJackDetector extends BaseWorkoutDetector {

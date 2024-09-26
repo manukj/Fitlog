@@ -1,6 +1,6 @@
 import 'package:Vyayama/resource/theme/theme.dart';
-import 'package:Vyayama/screens/home/view_model/workout_detector_view_model.dart';
-import 'package:Vyayama/screens/home/workout_detector/base_workout_detector.dart';
+import 'package:Vyayama/screens/workout/view_model/workout_detector_view_model.dart';
+import 'package:Vyayama/screens/workout/workout_detector/base_workout_detector.dart';
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -1,8 +1,8 @@
 import 'package:Vyayama/resource/logger/logger.dart';
 import 'package:Vyayama/resource/painter/pose_painter.dart';
 import 'package:Vyayama/resource/util/image_util.dart';
-import 'package:Vyayama/screens/home/workout_detector/interface/i_workout_detector.dart';
-import 'package:Vyayama/screens/home/workout_detector/interface/i_workout_detector_call_back.dart';
+import 'package:Vyayama/screens/workout/workout_detector/interface/i_workout_detector.dart';
+import 'package:Vyayama/screens/workout/workout_detector/interface/i_workout_detector_call_back.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
