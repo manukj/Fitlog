@@ -1,7 +1,7 @@
 # Fitlog!
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/61067950-3e50-4869-b17e-f1b8d425f75d" alt="logo">
+  <img src="https://github.com/user-attachments/assets/2d8f22c0-3b5a-4420-b50c-ad80861e47a8" alt="logo">
 </p>
 
 ## Table of Contents
