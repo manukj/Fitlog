@@ -12,7 +12,6 @@ dependencies:
   get: ^4.6.6
   lottie: ^3.1.2
   neopop: ^1.0.2
-  responsive_sizer: ^3.3.1
   toastification: ^2.0.0
   logger: ^2.4.0
   google_mlkit_pose_detection: ^0.12.0
