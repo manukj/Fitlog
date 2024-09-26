@@ -18,7 +18,7 @@ class WorkoutList {
     Workout('Deadlift', AssetsPath.deadlift, WorkouTypeEnums.deadlift),
     Workout('Squat', AssetsPath.squat, WorkouTypeEnums.squat),
     Workout(
-        'Jumping Pack', AssetsPath.jumpingJack, WorkouTypeEnums.jumpingJacks),
+        'Jumping Jack', AssetsPath.jumpingJack, WorkouTypeEnums.jumpingJacks),
   ];
 }
 
